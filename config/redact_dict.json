@@ -1,0 +1,492 @@
+{
+  "version": "1.0",
+  "description": "公司別名與指標性產品/品牌遮蔽字典，搭配動態 company_name 與 speaker 抽取補強去識別化",
+  "corporate_suffixes": [
+    "Incorporated", "Corporation", "Company", "Holdings", "Holding",
+    "Limited", "Group", "Enterprises", "Bancorp", "Financial",
+    "International", "Technologies", "Systems", "Worldwide",
+    "Inc.", "Inc", "Corp.", "Corp", "Co.", "Ltd.", "Ltd", "plc", "PLC", "N.V.", "L.P."
+  ],
+  "by_symbol": {
+    "AAPL": {
+      "aliases": ["Apple"],
+      "products": ["iPhone", "iPad", "Mac", "MacBook", "Apple Watch", "AirPods", "App Store", "iCloud", "Vision Pro", "Apple TV+", "Apple Music", "Apple Pay", "iOS", "macOS", "Apple Silicon"]
+    },
+    "MSFT": {
+      "aliases": ["Microsoft"],
+      "products": ["Azure", "Windows", "Office 365", "Microsoft 365", "Copilot", "Xbox", "LinkedIn", "GitHub", "Dynamics 365", "Teams", "Bing", "Activision"]
+    },
+    "NVDA": {
+      "aliases": ["NVIDIA", "Nvidia"],
+      "products": ["Blackwell", "Hopper", "H100", "H200", "B100", "B200", "GB200", "A100", "CUDA", "GeForce", "RTX", "Grace", "InfiniBand", "Mellanox", "Omniverse", "DGX", "NIM"]
+    },
+    "AVGO": {
+      "aliases": ["Broadcom"],
+      "products": ["VMware", "Symantec", "Tomahawk", "Jericho", "CA Technologies"]
+    },
+    "ORCL": {
+      "aliases": ["Oracle"],
+      "products": ["OCI", "Fusion", "NetSuite", "Cerner", "Exadata", "Java", "MySQL"]
+    },
+    "CRM": {
+      "aliases": ["Salesforce"],
+      "products": ["Slack", "Tableau", "MuleSoft", "Einstein", "Agentforce", "Data Cloud", "Service Cloud", "Sales Cloud"]
+    },
+    "ADBE": {
+      "aliases": ["Adobe"],
+      "products": ["Photoshop", "Creative Cloud", "Acrobat", "Firefly", "Illustrator", "Premiere", "Document Cloud", "Experience Cloud", "Marketo", "Figma"]
+    },
+    "AMD": {
+      "aliases": ["AMD", "Advanced Micro Devices"],
+      "products": ["EPYC", "Ryzen", "Radeon", "Instinct", "MI300", "MI300X", "MI325X", "Xilinx", "ROCm"]
+    },
+    "QCOM": {
+      "aliases": ["Qualcomm"],
+      "products": ["Snapdragon", "Adreno", "QCT", "QTL"]
+    },
+    "TXN": {
+      "aliases": ["Texas Instruments", "TI"],
+      "products": []
+    },
+    "INTU": {
+      "aliases": ["Intuit"],
+      "products": ["TurboTax", "QuickBooks", "Credit Karma", "Mailchimp"]
+    },
+    "AMAT": {
+      "aliases": ["Applied Materials"],
+      "products": []
+    },
+    "LRCX": {
+      "aliases": ["Lam Research"],
+      "products": []
+    },
+    "ADI": {
+      "aliases": ["Analog Devices"],
+      "products": ["Maxim Integrated", "Linear Technology"]
+    },
+    "MU": {
+      "aliases": ["Micron"],
+      "products": ["HBM3E", "HBM3", "Crucial"]
+    },
+    "CSCO": {
+      "aliases": ["Cisco"],
+      "products": ["Splunk", "Webex", "Meraki", "AppDynamics", "Catalyst"]
+    },
+    "GOOGL": {
+      "aliases": ["Alphabet", "Google"],
+      "products": ["YouTube", "Google Cloud", "Android", "Chrome", "Gemini", "Waymo", "DeepMind", "Pixel", "Search", "Workspace", "Play Store"]
+    },
+    "META": {
+      "aliases": ["Meta", "Meta Platforms", "Facebook"],
+      "products": ["Instagram", "WhatsApp", "Messenger", "Threads", "Reels", "Quest", "Oculus", "Llama", "Reality Labs", "Ray-Ban Meta"]
+    },
+    "NFLX": {
+      "aliases": ["Netflix"],
+      "products": ["Squid Game", "Stranger Things"]
+    },
+    "DIS": {
+      "aliases": ["Disney", "Walt Disney"],
+      "products": ["Disney+", "ESPN", "Hulu", "Pixar", "Marvel", "Star Wars", "Disneyland", "Walt Disney World"]
+    },
+    "CMCSA": {
+      "aliases": ["Comcast"],
+      "products": ["Xfinity", "NBCUniversal", "Peacock", "Sky", "Universal Studios"]
+    },
+    "VZ": {
+      "aliases": ["Verizon"],
+      "products": ["Fios", "TracFone"]
+    },
+    "T": {
+      "aliases": ["AT&T"],
+      "products": ["FirstNet", "WarnerMedia", "DIRECTV"]
+    },
+    "CHTR": {
+      "aliases": ["Charter", "Charter Communications"],
+      "products": ["Spectrum"]
+    },
+    "OMC": {
+      "aliases": ["Omnicom"],
+      "products": ["BBDO", "DDB", "TBWA", "Omni"]
+    },
+    "AMZN": {
+      "aliases": ["Amazon"],
+      "products": ["AWS", "Amazon Web Services", "Prime", "Prime Video", "Alexa", "Kindle", "Whole Foods", "Kuiper", "Trainium", "Inferentia", "Bedrock", "Zoox"]
+    },
+    "HD": {
+      "aliases": ["Home Depot", "The Home Depot"],
+      "products": ["SRS Distribution"]
+    },
+    "MCD": {
+      "aliases": ["McDonald's", "McDonalds"],
+      "products": ["Big Mac", "McCrispy", "McFlurry", "Happy Meal"]
+    },
+    "NKE": {
+      "aliases": ["Nike", "NIKE"],
+      "products": ["Jordan", "Air Jordan", "Converse", "Air Max", "Pegasus", "Dunk", "Air Force 1"]
+    },
+    "SBUX": {
+      "aliases": ["Starbucks"],
+      "products": ["Frappuccino", "Refresher", "Starbucks Rewards"]
+    },
+    "TJX": {
+      "aliases": ["TJX"],
+      "products": ["T.J. Maxx", "TJ Maxx", "Marshalls", "HomeGoods", "Winners", "Sierra"]
+    },
+    "BKNG": {
+      "aliases": ["Booking", "Booking Holdings", "Priceline"],
+      "products": ["Booking.com", "Priceline", "Agoda", "KAYAK", "OpenTable"]
+    },
+    "CMG": {
+      "aliases": ["Chipotle"],
+      "products": ["Chipotlane"]
+    },
+    "MAR": {
+      "aliases": ["Marriott"],
+      "products": ["Bonvoy", "Ritz-Carlton", "Sheraton", "Westin", "Courtyard", "Starwood"]
+    },
+    "ORLY": {
+      "aliases": ["O'Reilly", "O'Reilly Automotive"],
+      "products": []
+    },
+    "GM": {
+      "aliases": ["General Motors", "GM"],
+      "products": ["Chevrolet", "Chevy", "Cadillac", "GMC", "Buick", "Ultium", "Cruise", "OnStar", "Silverado"]
+    },
+    "F": {
+      "aliases": ["Ford", "Ford Motor"],
+      "products": ["F-150", "F-Series", "Mustang", "Bronco", "Ford Pro", "Model e", "Ford Blue", "Lincoln"]
+    },
+    "PG": {
+      "aliases": ["Procter & Gamble", "P&G"],
+      "products": ["Tide", "Pampers", "Gillette", "Olay", "SK-II", "Crest", "Oral-B", "Bounty", "Charmin", "Ariel", "Febreze", "Dawn", "Pantene"]
+    },
+    "KO": {
+      "aliases": ["Coca-Cola", "Coke"],
+      "products": ["Sprite", "Fanta", "Fairlife", "BodyArmor", "Costa Coffee", "Minute Maid", "Powerade", "Topo Chico"]
+    },
+    "PEP": {
+      "aliases": ["PepsiCo", "Pepsi"],
+      "products": ["Frito-Lay", "Gatorade", "Quaker", "Doritos", "Lay's", "Tostitos", "Cheetos", "Mountain Dew", "SodaStream", "Tropicana"]
+    },
+    "COST": {
+      "aliases": ["Costco"],
+      "products": ["Kirkland", "Kirkland Signature"]
+    },
+    "MDLZ": {
+      "aliases": ["Mondelez", "Mondelēz"],
+      "products": ["Oreo", "Cadbury", "Milka", "Ritz", "Toblerone", "Trident", "Clif Bar", "BelVita"]
+    },
+    "CL": {
+      "aliases": ["Colgate-Palmolive", "Colgate"],
+      "products": ["Hill's", "Palmolive", "Ajax", "Irish Spring", "EltaMD"]
+    },
+    "MO": {
+      "aliases": ["Altria"],
+      "products": ["Marlboro", "NJOY", "on!", "Copenhagen", "Skoal", "JUUL"]
+    },
+    "PM": {
+      "aliases": ["Philip Morris", "PMI"],
+      "products": ["IQOS", "ZYN", "Marlboro", "Swedish Match", "ILUMA"]
+    },
+    "GIS": {
+      "aliases": ["General Mills"],
+      "products": ["Blue Buffalo", "Cheerios", "Pillsbury", "Häagen-Dazs", "Nature Valley", "Betty Crocker"]
+    },
+    "SYY": {
+      "aliases": ["Sysco"],
+      "products": []
+    },
+    "JPM": {
+      "aliases": ["JPMorgan", "JPMorgan Chase", "JP Morgan", "Chase"],
+      "products": ["Sapphire", "First Republic"]
+    },
+    "BAC": {
+      "aliases": ["Bank of America", "BofA"],
+      "products": ["Merrill", "Merrill Lynch", "Erica"]
+    },
+    "WFC": {
+      "aliases": ["Wells Fargo"],
+      "products": []
+    },
+    "GS": {
+      "aliases": ["Goldman Sachs", "Goldman"],
+      "products": ["Marcus"]
+    },
+    "MS": {
+      "aliases": ["Morgan Stanley"],
+      "products": ["E*TRADE", "Eaton Vance"]
+    },
+    "C": {
+      "aliases": ["Citigroup", "Citi", "Citibank"],
+      "products": ["Banamex"]
+    },
+    "BLK": {
+      "aliases": ["BlackRock"],
+      "products": ["iShares", "Aladdin", "GIP", "Preqin"]
+    },
+    "AXP": {
+      "aliases": ["American Express", "Amex"],
+      "products": ["Platinum Card", "Centurion", "Resy"]
+    },
+    "V": {
+      "aliases": ["Visa"],
+      "products": ["Visa Direct", "CyberSource"]
+    },
+    "MA": {
+      "aliases": ["Mastercard", "MasterCard"],
+      "products": []
+    },
+    "SPGI": {
+      "aliases": ["S&P Global", "S&P"],
+      "products": ["IHS Markit", "Platts", "Capital IQ"]
+    },
+    "CB": {
+      "aliases": ["Chubb"],
+      "products": []
+    },
+    "TRV": {
+      "aliases": ["Travelers"],
+      "products": []
+    },
+    "ICE": {
+      "aliases": ["Intercontinental Exchange", "ICE"],
+      "products": ["NYSE", "Ellie Mae", "Black Knight", "Bakkt"]
+    },
+    "UNH": {
+      "aliases": ["UnitedHealth", "UnitedHealthcare"],
+      "products": ["Optum", "OptumRx", "OptumHealth", "OptumInsight", "Change Healthcare"]
+    },
+    "JNJ": {
+      "aliases": ["Johnson & Johnson", "J&J"],
+      "products": ["Darzalex", "Stelara", "Tremfya", "Erleada", "Carvykti", "Abiomed", "Shockwave", "Kenvue", "Tylenol"]
+    },
+    "LLY": {
+      "aliases": ["Eli Lilly", "Lilly"],
+      "products": ["Mounjaro", "Zepbound", "Trulicity", "Verzenio", "Jardiance", "Taltz", "Kisunla", "Donanemab", "Tirzepatide"]
+    },
+    "ABBV": {
+      "aliases": ["AbbVie"],
+      "products": ["Humira", "Skyrizi", "Rinvoq", "Botox", "Imbruvica", "Venclexta", "Vraylar", "Allergan", "Ubrelvy", "Qulipta"]
+    },
+    "MRK": {
+      "aliases": ["Merck"],
+      "products": ["Keytruda", "Gardasil", "Winrevair", "Januvia", "Lynparza", "Lenvima", "Lagevrio"]
+    },
+    "TMO": {
+      "aliases": ["Thermo Fisher", "Thermo Fisher Scientific"],
+      "products": ["PPD", "Patheon", "Olink"]
+    },
+    "ABT": {
+      "aliases": ["Abbott"],
+      "products": ["FreeStyle Libre", "Libre", "Ensure", "Similac", "MitraClip", "Alinity", "BinaxNOW"]
+    },
+    "DHR": {
+      "aliases": ["Danaher"],
+      "products": ["Cytiva", "Cepheid", "Beckman Coulter", "Pall", "Abcam", "Veralto"]
+    },
+    "PFE": {
+      "aliases": ["Pfizer"],
+      "products": ["Comirnaty", "Paxlovid", "Eliquis", "Prevnar", "Ibrance", "Vyndaqel", "Nurtec", "Seagen", "Padcev"]
+    },
+    "AMGN": {
+      "aliases": ["Amgen"],
+      "products": ["Repatha", "Prolia", "Enbrel", "Otezla", "Tezspire", "Tepezza", "Horizon", "MariTide", "Evenity"]
+    },
+    "ISRG": {
+      "aliases": ["Intuitive Surgical", "Intuitive"],
+      "products": ["da Vinci", "da Vinci 5", "Ion"]
+    },
+    "SYK": {
+      "aliases": ["Stryker"],
+      "products": ["Mako", "Vocera", "Inari"]
+    },
+    "MDT": {
+      "aliases": ["Medtronic"],
+      "products": ["Hugo", "MiniMed", "PulseSelect", "Affera", "Symplicity"]
+    },
+    "ELV": {
+      "aliases": ["Elevance", "Elevance Health", "Anthem"],
+      "products": ["Carelon", "WellPoint"]
+    },
+    "CAT": {
+      "aliases": ["Caterpillar", "Cat"],
+      "products": ["Solar Turbines"]
+    },
+    "HON": {
+      "aliases": ["Honeywell"],
+      "products": ["Quantinuum", "Solstice"]
+    },
+    "UNP": {
+      "aliases": ["Union Pacific"],
+      "products": []
+    },
+    "GE": {
+      "aliases": ["General Electric", "GE Aerospace", "GE"],
+      "products": ["LEAP", "CFM", "GEnx", "GE9X", "GE Vernova", "GE HealthCare"]
+    },
+    "RTX": {
+      "aliases": ["RTX", "Raytheon", "Raytheon Technologies", "United Technologies"],
+      "products": ["Pratt & Whitney", "Collins Aerospace", "Patriot", "GTF"]
+    },
+    "DE": {
+      "aliases": ["Deere", "John Deere"],
+      "products": ["See & Spray", "Operations Center"]
+    },
+    "LMT": {
+      "aliases": ["Lockheed Martin", "Lockheed"],
+      "products": ["F-35", "Sikorsky", "HIMARS", "PAC-3", "Aegis"]
+    },
+    "UPS": {
+      "aliases": ["UPS", "United Parcel Service"],
+      "products": ["Coyote"]
+    },
+    "FDX": {
+      "aliases": ["FedEx"],
+      "products": ["FedEx Express", "FedEx Ground", "FedEx Freight"]
+    },
+    "ETN": {
+      "aliases": ["Eaton"],
+      "products": []
+    },
+    "ITW": {
+      "aliases": ["Illinois Tool Works", "ITW"],
+      "products": []
+    },
+    "EMR": {
+      "aliases": ["Emerson", "Emerson Electric"],
+      "products": ["AspenTech", "National Instruments", "Copeland"]
+    },
+    "WM": {
+      "aliases": ["Waste Management", "WM"],
+      "products": ["Stericycle"]
+    },
+    "XOM": {
+      "aliases": ["ExxonMobil", "Exxon Mobil", "Exxon"],
+      "products": ["Pioneer", "Guyana", "Stabroek", "Permian"]
+    },
+    "CVX": {
+      "aliases": ["Chevron"],
+      "products": ["Tengiz", "Hess", "PDC Energy", "Gorgon"]
+    },
+    "COP": {
+      "aliases": ["ConocoPhillips"],
+      "products": ["Willow", "Marathon Oil", "Surmont"]
+    },
+    "SLB": {
+      "aliases": ["SLB", "Schlumberger"],
+      "products": ["OneSubsea", "ChampionX", "Delfi"]
+    },
+    "EOG": {
+      "aliases": ["EOG", "EOG Resources"],
+      "products": ["Dorado", "Utica"]
+    },
+    "MPC": {
+      "aliases": ["Marathon Petroleum"],
+      "products": ["MPLX", "Speedway"]
+    },
+    "PSX": {
+      "aliases": ["Phillips 66"],
+      "products": ["DCP Midstream", "CPChem"]
+    },
+    "VLO": {
+      "aliases": ["Valero"],
+      "products": ["Diamond Green Diesel"]
+    },
+    "NEE": {
+      "aliases": ["NextEra", "NextEra Energy"],
+      "products": ["FPL", "Florida Power & Light", "NEER"]
+    },
+    "SO": {
+      "aliases": ["Southern Company"],
+      "products": ["Vogtle", "Georgia Power", "Alabama Power"]
+    },
+    "DUK": {
+      "aliases": ["Duke Energy"],
+      "products": []
+    },
+    "D": {
+      "aliases": ["Dominion", "Dominion Energy"],
+      "products": ["Coastal Virginia Offshore Wind"]
+    },
+    "AEP": {
+      "aliases": ["American Electric Power", "AEP"],
+      "products": []
+    },
+    "SRE": {
+      "aliases": ["Sempra"],
+      "products": ["Oncor", "SDG&E", "SoCalGas", "Port Arthur"]
+    },
+    "XEL": {
+      "aliases": ["Xcel", "Xcel Energy"],
+      "products": []
+    },
+    "WEC": {
+      "aliases": ["WEC Energy", "WEC"],
+      "products": ["We Energies"]
+    },
+    "PLD": {
+      "aliases": ["Prologis"],
+      "products": ["Duke Realty"]
+    },
+    "AMT": {
+      "aliases": ["American Tower"],
+      "products": ["CoreSite"]
+    },
+    "EQIX": {
+      "aliases": ["Equinix"],
+      "products": ["xScale", "IBX"]
+    },
+    "SPG": {
+      "aliases": ["Simon Property", "Simon"],
+      "products": ["Taubman"]
+    },
+    "O": {
+      "aliases": ["Realty Income"],
+      "products": ["VEREIT", "Spirit Realty"]
+    },
+    "PSA": {
+      "aliases": ["Public Storage"],
+      "products": ["Simply Self Storage"]
+    },
+    "WELL": {
+      "aliases": ["Welltower"],
+      "products": []
+    },
+    "DLR": {
+      "aliases": ["Digital Realty"],
+      "products": ["Interxion"]
+    },
+    "APD": {
+      "aliases": ["Air Products"],
+      "products": ["NEOM"]
+    },
+    "SHW": {
+      "aliases": ["Sherwin-Williams", "Sherwin"],
+      "products": ["Valspar", "Minwax"]
+    },
+    "ECL": {
+      "aliases": ["Ecolab"],
+      "products": ["Nalco", "Purolite"]
+    },
+    "FCX": {
+      "aliases": ["Freeport-McMoRan", "Freeport"],
+      "products": ["Grasberg", "Morenci"]
+    },
+    "NEM": {
+      "aliases": ["Newmont"],
+      "products": ["Newcrest", "Goldcorp"]
+    },
+    "NUE": {
+      "aliases": ["Nucor"],
+      "products": []
+    },
+    "PPG": {
+      "aliases": ["PPG", "PPG Industries"],
+      "products": ["Comex", "Glidden"]
+    },
+    "VMC": {
+      "aliases": ["Vulcan", "Vulcan Materials"],
+      "products": []
+    }
+  }
+}

@@ -29,11 +29,13 @@ RAW_EPS_SUE_PATH: Path = RAW_DIR / "eps_sue_raw.parquet"
 RAW_NYSE_CALENDAR_PATH: Path = RAW_DIR / "nyse_calendar.parquet"
 
 CLEAN_DIR: Path = DATA_DIR / "02_clean"
+CLEAN_TRANSCRIPTS_DIR: Path = CLEAN_DIR / "transcripts_clean"
 CACHE_DIR: Path = DATA_DIR / "03_cache"
 FEATURES_DIR: Path = DATA_DIR / "04_features"
 
 OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
 STAGE1_AUDIT_MD: Path = OUTPUTS_DIR / "stage1_raw_audit.md"
+STAGE2_AUDIT_MD: Path = OUTPUTS_DIR / "stage2_clean_audit.md"
 
 
 # ==================== 資料源與樣本範圍設定 ====================
@@ -112,6 +114,39 @@ class MarketETLSettings:
     parquet_compression: str = "zstd"
 
 
+@dataclass(frozen=True)
+class CleanSettings:
+    """Stage 2 文本切分、去識別化與軟刪除品質門檻設定。"""
+
+    header_speaker_labels: Tuple[str, ...] = (
+        "executives",
+        "analysts",
+        "corporate participants",
+        "conference call participants",
+        "company participants",
+        "presentation",
+    )
+    qa_handoff_patterns: Tuple[str, ...] = (
+        r"question[\s\-]+and[\s\-]+answer",
+        r"\bq\s*&\s*a\b",
+        r"first question comes from",
+        r"our first question",
+        r"open the (?:floor|line|lines|call) for questions",
+        r"open it up (?:for|to) questions",
+        r"we will now begin the question",
+        r"(?:happy|pleased|ready) to take (?:your )?questions",
+        r"ready for (?:your )?questions",
+        r"concludes our (?:formal|prepared) (?:remarks|comments)",
+        r"\[operator instructions?\]",
+        r"we(?:'ll| will) (?:go|move) first to",
+        r"limit yourself to one",
+        r"turn (?:the call )?(?:back )?over to (?:the )?operator",
+    )
+    min_prepared_words_before_qa: int = 200
+    min_qa_words: int = 150
+    audit_sample_size: int = 10
+
+
 # ==================== 量化建模與回測參數 ====================
 @dataclass(frozen=True)
 class QuantSettings:
@@ -130,6 +165,7 @@ class QuantSettings:
 
 DATA_CFG = DataSettings()
 MARKET_ETL_CFG = MarketETLSettings()
+CLEAN_CFG = CleanSettings()
 PROBE_CFG = ProbeSettings()
 QUANT_CFG = QuantSettings()
 
