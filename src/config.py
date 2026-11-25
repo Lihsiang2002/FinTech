@@ -22,11 +22,18 @@ REDACT_DICT_PATH: Path = CONFIG_DIR / "redact_dict.json"
 
 DATA_DIR: Path = PROJECT_ROOT / "data"
 RAW_DIR: Path = DATA_DIR / "01_raw"
+RAW_TRANSCRIPTS_DIR: Path = RAW_DIR / "transcripts_raw"
+RAW_MARKET_OHLCV_PATH: Path = RAW_DIR / "market_ohlcv_raw.parquet"
+RAW_MACRO_INDEX_PATH: Path = RAW_DIR / "macro_index_raw.parquet"
+RAW_EPS_SUE_PATH: Path = RAW_DIR / "eps_sue_raw.parquet"
+RAW_NYSE_CALENDAR_PATH: Path = RAW_DIR / "nyse_calendar.parquet"
+
 CLEAN_DIR: Path = DATA_DIR / "02_clean"
 CACHE_DIR: Path = DATA_DIR / "03_cache"
 FEATURES_DIR: Path = DATA_DIR / "04_features"
 
 OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
+STAGE1_AUDIT_MD: Path = OUTPUTS_DIR / "stage1_raw_audit.md"
 
 
 # ==================== 資料源與樣本範圍設定 ====================
@@ -88,6 +95,23 @@ class ProbeSettings:
     symbol_coverage_csv: Path = OUTPUTS_DIR / "stage0_symbol_coverage.csv"
 
 
+@dataclass(frozen=True)
+class MarketETLSettings:
+    """Stage 1 市場量價、大盤、EPS Surprise 與交易日曆擷取設定。"""
+
+    macro_tickers: Tuple[str, ...] = ("^GSPC", "^VIX")
+    calendar_start_date: str = "2015-01-01"
+    calendar_end_date: str = "2027-12-31"
+    yf_batch_size: int = 20
+    yf_batch_sleep_sec: float = 0.5
+    yf_eps_limit: int = 48
+    yf_eps_sleep_sec: float = 0.2
+    max_retries: int = 3
+    retry_backoff_base_sec: float = 1.5
+    min_ohlcv_coverage_ratio: float = 0.95
+    parquet_compression: str = "zstd"
+
+
 # ==================== 量化建模與回測參數 ====================
 @dataclass(frozen=True)
 class QuantSettings:
@@ -105,6 +129,7 @@ class QuantSettings:
 
 
 DATA_CFG = DataSettings()
+MARKET_ETL_CFG = MarketETLSettings()
 PROBE_CFG = ProbeSettings()
 QUANT_CFG = QuantSettings()
 
