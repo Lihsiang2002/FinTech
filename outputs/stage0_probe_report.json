@@ -1,0 +1,259 @@
+{
+  "generated_at": "2026-11-25T18:00:35",
+  "dataset_id": "kurry/sp500_earnings_transcripts",
+  "columns": [
+    "symbol",
+    "quarter",
+    "year",
+    "date",
+    "content",
+    "structured_content",
+    "company_name",
+    "company_id"
+  ],
+  "structured_content_keys": {
+    "speaker": 1000,
+    "text": 1000
+  },
+  "schema_sample_count": 200,
+  "qa_detection_rate_pct": 94.5,
+  "word_count_stats": {
+    "min": 1884,
+    "median": 8995,
+    "mean": 8562.0,
+    "below_1500_count": 0
+  },
+  "total_rows_all_years": 33362,
+  "total_rows_since_2016": 19077,
+  "unique_symbols_since_2016": 625,
+  "global_unique_quarters_since_2016": 40,
+  "symbols_with_completeness_ge_90pct": 366,
+  "symbols_with_completeness_ge_85pct": 381,
+  "timezone_inference": {
+    "hypothesis": "America/New_York (美東時間，AMC 中位數約 16-18 時、BMO 約 7-10 時)",
+    "amc_anchor_hour_distribution": {
+      "3": 1,
+      "5": 3,
+      "8": 1,
+      "12": 3,
+      "15": 1,
+      "16": 4,
+      "17": 166,
+      "18": 5,
+      "19": 2,
+      "20": 1,
+      "21": 3
+    },
+    "bmo_anchor_hour_distribution": {
+      "7": 3,
+      "8": 161,
+      "9": 13,
+      "10": 2,
+      "11": 4,
+      "13": 1,
+      "14": 2,
+      "19": 1
+    },
+    "anchor_raw_samples": {
+      "AAPL": [
+        "2020Q4: 2020-10-29 17:00:00",
+        "2020Q3: 2020-07-30 17:00:00",
+        "2020Q2: 2020-04-30 17:00:00",
+        "2020Q1: 2020-01-28 17:00:00",
+        "2021Q4: 2021-10-28 17:00:00"
+      ],
+      "AMZN": [
+        "2020Q4: 2021-02-02 17:30:00",
+        "2020Q3: 2020-10-29 17:30:00",
+        "2020Q2: 2020-07-30 17:30:00",
+        "2020Q1: 2020-04-30 17:30:00",
+        "2021Q4: 2022-02-03 17:30:00"
+      ],
+      "BAC": [
+        "2020Q4: 2021-01-19 08:30:00",
+        "2020Q3: 2020-10-14 08:30:00",
+        "2020Q2: 2020-07-16 08:30:00",
+        "2020Q1: 2020-04-15 08:30:00",
+        "2021Q4: 2022-01-19 11:00:00"
+      ],
+      "JNJ": [
+        "2020Q4: 2021-01-26 08:30:00",
+        "2020Q3: 2020-10-13 08:30:00",
+        "2020Q2: 2020-07-16 08:00:00",
+        "2020Q1: 2020-04-14 08:30:00",
+        "2021Q4: 2022-01-25 08:30:00"
+      ],
+      "JPM": [
+        "2020Q4: 2021-01-15 08:30:00",
+        "2020Q3: 2020-10-14 08:30:00",
+        "2020Q2: 2020-07-14 08:30:00",
+        "2020Q1: 2020-04-14 08:30:00",
+        "2021Q4: 2022-01-14 08:30:00"
+      ],
+      "META": [
+        "2020Q4: 2021-01-27 17:00:00",
+        "2020Q3: 2020-10-30 18:00:00",
+        "2020Q2: 2020-07-30 18:00:00",
+        "2020Q1: 2020-04-29 17:00:00",
+        "2021Q4: 2022-02-02 20:36:03"
+      ],
+      "MSFT": [
+        "2020Q4: 2020-07-22 17:30:00",
+        "2020Q3: 2020-04-29 17:30:00",
+        "2020Q2: 2020-01-29 17:30:00",
+        "2020Q1: 2019-10-23 17:30:00",
+        "2021Q4: 2021-07-27 17:00:00"
+      ],
+      "NVDA": [
+        "2020Q4: 2020-02-13 17:30:00",
+        "2020Q3: 2019-11-14 17:30:00",
+        "2020Q2: 2019-08-16 17:30:00",
+        "2020Q1: 2019-05-16 17:30:00",
+        "2021Q4: 2021-02-24 17:00:00"
+      ],
+      "PG": [
+        "2020Q4: 2020-07-30 08:30:00",
+        "2020Q3: 2020-04-17 08:30:00",
+        "2020Q2: 2020-01-23 08:30:00",
+        "2020Q1: 2019-10-22 08:30:00",
+        "2021Q4: 2021-07-30 08:30:00"
+      ],
+      "UNH": [
+        "2020Q4: 2021-01-20 07:00:00",
+        "2020Q3: 2020-10-14 09:00:00",
+        "2020Q2: 2020-07-15 09:00:00",
+        "2020Q1: 2020-04-15 08:00:00",
+        "2021Q4: 2022-01-15 07:00:00"
+      ]
+    }
+  },
+  "yearly_timestamp_stats": {
+    "2016": {
+      "total": 1899,
+      "non_zero_time": 1882,
+      "non_zero_time_pct": 99.1,
+      "midnight_zero": 17,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2017": {
+      "total": 1946,
+      "non_zero_time": 1931,
+      "non_zero_time_pct": 99.23,
+      "midnight_zero": 15,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2018": {
+      "total": 1969,
+      "non_zero_time": 1952,
+      "non_zero_time_pct": 99.14,
+      "midnight_zero": 17,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2019": {
+      "total": 2014,
+      "non_zero_time": 2004,
+      "non_zero_time_pct": 99.5,
+      "midnight_zero": 10,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2020": {
+      "total": 2210,
+      "non_zero_time": 2202,
+      "non_zero_time_pct": 99.64,
+      "midnight_zero": 8,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2021": {
+      "total": 2170,
+      "non_zero_time": 2156,
+      "non_zero_time_pct": 99.35,
+      "midnight_zero": 14,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2022": {
+      "total": 2110,
+      "non_zero_time": 2093,
+      "non_zero_time_pct": 99.19,
+      "midnight_zero": 17,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2023": {
+      "total": 2079,
+      "non_zero_time": 2067,
+      "non_zero_time_pct": 99.42,
+      "midnight_zero": 12,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2024": {
+      "total": 2033,
+      "non_zero_time": 2028,
+      "non_zero_time_pct": 99.75,
+      "midnight_zero": 5,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    },
+    "2025": {
+      "total": 647,
+      "non_zero_time": 647,
+      "non_zero_time_pct": 100.0,
+      "midnight_zero": 0,
+      "date_only_or_missing": 0,
+      "has_explicit_tz": 0
+    }
+  },
+  "sample_records": [
+    {
+      "symbol": "A",
+      "year": 2020,
+      "quarter": 4,
+      "date": "2020-11-23 16:30:00",
+      "n_segments": 113,
+      "qa_split_index": 3,
+      "est_words": 9546
+    },
+    {
+      "symbol": "A",
+      "year": 2020,
+      "quarter": 3,
+      "date": "2020-08-18 16:30:00",
+      "n_segments": 106,
+      "qa_split_index": 3,
+      "est_words": 9782
+    },
+    {
+      "symbol": "A",
+      "year": 2020,
+      "quarter": 2,
+      "date": "2020-05-21 16:30:00",
+      "n_segments": 131,
+      "qa_split_index": 3,
+      "est_words": 9738
+    },
+    {
+      "symbol": "A",
+      "year": 2020,
+      "quarter": 1,
+      "date": "2020-02-18 16:30:00",
+      "n_segments": 154,
+      "qa_split_index": 3,
+      "est_words": 10129
+    },
+    {
+      "symbol": "A",
+      "year": 2021,
+      "quarter": 4,
+      "date": "2021-11-22 16:30:00",
+      "n_segments": 178,
+      "qa_split_index": 3,
+      "est_words": 10541
+    }
+  ]
+}

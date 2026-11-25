@@ -1,0 +1,30 @@
+# Secrets & Environment
+.env
+.venv/
+venv/
+env/
+
+# Data Lakehouse (Large & Local Only)
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter & IDE
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# LaTeX Build Artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz

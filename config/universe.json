@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "created_at": "2026-11-25",
+  "description": "S&P 500 GICS 11 大板塊均衡股票池（120 檔，均通過 Stage 0 2016–2025 季度完整度 >= 90% 驗證，排除雙重股權重複標的）",
+  "total_symbols": 120,
+  "rename_map": {
+    "FB": "META",
+    "ANTM": "ELV",
+    "FISV": "FI",
+    "COG": "CTRA",
+    "WLTW": "WTW",
+    "PKI": "RVTY",
+    "ABC": "COR",
+    "PEAK": "DOC",
+    "FLT": "CPAY",
+    "RE": "EG"
+  },
+  "pilot_symbols": [
+    "AAPL",
+    "NVDA",
+    "MSFT",
+    "JPM",
+    "BAC",
+    "GS",
+    "UNH",
+    "JNJ",
+    "LLY",
+    "CAT",
+    "HON",
+    "AMZN",
+    "MCD",
+    "PG",
+    "COST",
+    "META",
+    "XOM",
+    "NEE",
+    "PLD",
+    "SHW"
+  ],
+  "sectors": {
+    "Information Technology": [
+      "AAPL", "MSFT", "NVDA", "AVGO", "ORCL", "CRM", "ADBE", "AMD",
+      "QCOM", "TXN", "INTU", "AMAT", "LRCX", "ADI", "MU", "CSCO"
+    ],
+    "Financials": [
+      "JPM", "BAC", "WFC", "GS", "MS", "C", "BLK", "AXP",
+      "V", "MA", "SPGI", "CB", "TRV", "ICE"
+    ],
+    "Health Care": [
+      "UNH", "JNJ", "LLY", "ABBV", "MRK", "TMO", "ABT", "DHR",
+      "PFE", "AMGN", "ISRG", "SYK", "MDT", "ELV"
+    ],
+    "Industrials": [
+      "CAT", "HON", "UNP", "GE", "RTX", "DE", "LMT", "UPS",
+      "FDX", "ETN", "ITW", "EMR", "WM"
+    ],
+    "Consumer Discretionary": [
+      "AMZN", "HD", "MCD", "NKE", "SBUX", "TJX", "BKNG", "CMG",
+      "MAR", "ORLY", "GM", "F"
+    ],
+    "Consumer Staples": [
+      "PG", "KO", "PEP", "COST", "MDLZ", "CL", "MO", "PM",
+      "GIS", "SYY"
+    ],
+    "Communication Services": [
+      "GOOGL", "META", "NFLX", "DIS", "CMCSA", "VZ", "T", "EA",
+      "CHTR"
+    ],
+    "Energy": [
+      "XOM", "CVX", "COP", "SLB", "EOG", "MPC", "PSX", "VLO"
+    ],
+    "Utilities": [
+      "NEE", "SO", "DUK", "D", "AEP", "SRE", "XEL", "WEC"
+    ],
+    "Real Estate": [
+      "PLD", "AMT", "EQIX", "SPG", "O", "PSA", "WELL", "DLR"
+    ],
+    "Materials": [
+      "APD", "SHW", "ECL", "FCX", "NEM", "NUE", "PPG", "VMC"
+    ]
+  },
+  "symbols": [
+    "AAPL", "MSFT", "NVDA", "AVGO", "ORCL", "CRM", "ADBE", "AMD",
+    "QCOM", "TXN", "INTU", "AMAT", "LRCX", "ADI", "MU", "CSCO",
+    "JPM", "BAC", "WFC", "GS", "MS", "C", "BLK", "AXP",
+    "V", "MA", "SPGI", "CB", "TRV", "ICE",
+    "UNH", "JNJ", "LLY", "ABBV", "MRK", "TMO", "ABT", "DHR",
+    "PFE", "AMGN", "ISRG", "SYK", "MDT", "ELV",
+    "CAT", "HON", "UNP", "GE", "RTX", "DE", "LMT", "UPS",
+    "FDX", "ETN", "ITW", "EMR", "WM",
+    "AMZN", "HD", "MCD", "NKE", "SBUX", "TJX", "BKNG", "CMG",
+    "MAR", "ORLY", "GM", "F",
+    "PG", "KO", "PEP", "COST", "MDLZ", "CL", "MO", "PM",
+    "GIS", "SYY",
+    "GOOGL", "META", "NFLX", "DIS", "CMCSA", "VZ", "T", "EA",
+    "CHTR",
+    "XOM", "CVX", "COP", "SLB", "EOG", "MPC", "PSX", "VLO",
+    "NEE", "SO", "DUK", "D", "AEP", "SRE", "XEL", "WEC",
+    "PLD", "AMT", "EQIX", "SPG", "O", "PSA", "WELL", "DLR",
+    "APD", "SHW", "ECL", "FCX", "NEM", "NUE", "PPG", "VMC"
+  ]
+}

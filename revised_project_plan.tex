@@ -1,0 +1,990 @@
+% !TEX program = xelatex
+\documentclass[11pt, a4paper]{article}
+
+% ==================== 基礎版面與中文字型 ====================
+\usepackage[top=2.2cm, bottom=2.1cm, left=1.9cm, right=1.9cm, headheight=22pt]{geometry}
+\usepackage{xeCJK}
+\usepackage{fontspec}
+
+\setCJKmainfont{Microsoft JhengHei}[
+    BoldFont = Microsoft JhengHei Bold,
+    AutoFakeSlant = 0.15
+]
+\setCJKsansfont{Microsoft JhengHei}[
+    BoldFont = Microsoft JhengHei Bold,
+    AutoFakeSlant = 0.15
+]
+\setCJKmonofont{Microsoft JhengHei}
+
+\setmainfont{Calibri}[
+    BoldFont = Calibri Bold,
+    ItalicFont = Calibri Italic,
+    BoldItalicFont = Calibri Bold Italic
+]
+\setmonofont{Consolas}[Scale=0.86]
+
+% ==================== 常用套件 ====================
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds, calc, decorations.pathreplacing}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+
+% ==================== 繁體中文化標籤 ====================
+\renewcommand{\contentsname}{目錄}
+\renewcommand{\figurename}{圖}
+\renewcommand{\tablename}{表}
+\captionsetup{font=small, labelfont=bf, labelsep=colon}
+
+% ==================== 色彩定義 ====================
+\definecolor{NavyPrimary}{HTML}{1B365D}
+\definecolor{BlueAccent}{HTML}{2B6CB0}
+\definecolor{TealAccent}{HTML}{0F766E}
+\definecolor{AmberBorder}{HTML}{B45309}
+\definecolor{AmberBg}{HTML}{FFFBEB}
+\definecolor{SlateBg}{HTML}{F8FAFC}
+\definecolor{SlateBorder}{HTML}{CBD5E1}
+\definecolor{RedAlert}{HTML}{991B1B}
+\definecolor{RedBg}{HTML}{FEF2F2}
+\definecolor{GreenBg}{HTML}{F0FDF4}
+\definecolor{GreenBorder}{HTML}{15803D}
+\definecolor{TextDark}{HTML}{1E293B}
+\definecolor{TextMuted}{HTML}{475569}
+
+\color{TextDark}
+
+% ==================== 超連結設定 ====================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=NavyPrimary,
+    urlcolor=BlueAccent,
+    citecolor=NavyPrimary,
+    pdftitle={聽音辨勢：美股法說會情緒特徵與多模態量化預測系統完整執行計畫書},
+    pdfauthor={第七組}
+}
+
+% ==================== 頁首頁尾 ====================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{TextMuted}聽音辨勢：美股法說會情緒特徵與多模態量化預測系統（修正定案版計畫書）}
+\fancyhead[R]{\small\color{TextMuted}第七組}
+\fancyfoot[C]{\small\color{TextMuted}第 \thepage\ 頁 / 共 \pageref{LastPage}\ 頁}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{SlateBorder}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{SlateBorder}\leaders\hrule height \footrulewidth\hfill}}
+
+% ==================== 段落與標題樣式 ====================
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4.5pt}
+\linespread{1.2}
+\sloppy
+
+\usepackage{titlesec}
+\titleformat{\section}
+    {\Large\bfseries\color{NavyPrimary}}
+    {\thesection.}{0.5em}{}[\vspace{2pt}{\color{NavyPrimary}\titlerule[1pt]}]
+\titleformat{\subsection}
+    {\large\bfseries\color{BlueAccent}}
+    {\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}
+    {\normalsize\bfseries\color{TealAccent}}
+    {\thesubsubsection}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{12pt}{5pt}
+\titlespacing*{\subsection}{0pt}{9pt}{3.5pt}
+\titlespacing*{\subsubsection}{0pt}{7pt}{2pt}
+
+% ==================== 自訂資訊框 ====================
+\newtcolorbox{summarybox}[1]{
+    enhanced, breakable,
+    colback=SlateBg, colframe=NavyPrimary,
+    boxrule=0.8pt, arc=3pt,
+    left=10pt, right=10pt, top=8pt, bottom=8pt,
+    title={\bfseries\color{white} #1},
+    coltitle=white,
+    attach boxed title to top left={yshift=-2mm, xshift=4mm},
+    boxed title style={colback=NavyPrimary, arc=2pt, boxrule=0pt}
+}
+
+\newtcolorbox{warnbox}[1]{
+    enhanced, breakable,
+    colback=AmberBg, colframe=AmberBorder,
+    leftrule=3.5pt, rightrule=0.6pt, toprule=0.6pt, bottomrule=0.6pt,
+    arc=2pt, left=10pt, right=10pt, top=7pt, bottom=7pt,
+    title={\bfseries\color{AmberBorder} #1},
+    colbacktitle=AmberBg,
+    boxed title style={boxrule=0pt}
+}
+
+\newtcolorbox{whybox}[1][設計理由與工程依據（Why）]{
+    enhanced, breakable,
+    colback=GreenBg, colframe=GreenBorder,
+    leftrule=3.5pt, rightrule=0.5pt, toprule=0.5pt, bottomrule=0.5pt,
+    arc=2pt, left=10pt, right=10pt, top=6pt, bottom=6pt,
+    title={\bfseries\color{GreenBorder} #1},
+    colbacktitle=GreenBg
+}
+
+\newtcolorbox{gatebox}[1][階段驗收檢查點（Verification Gate）]{
+    enhanced, breakable,
+    colback=RedBg, colframe=RedAlert,
+    leftrule=3.5pt, rightrule=0.5pt, toprule=0.5pt, bottomrule=0.5pt,
+    arc=2pt, left=10pt, right=10pt, top=6pt, bottom=6pt,
+    title={\bfseries\color{RedAlert} #1},
+    colbacktitle=RedBg
+}
+
+% ==================== 程式碼區塊樣式 ====================
+\lstset{
+    backgroundcolor=\color{SlateBg},
+    frame=single,
+    rulecolor=\color{SlateBorder},
+    basicstyle=\ttfamily\footnotesize\color{TextDark},
+    keywordstyle=\bfseries\color{BlueAccent},
+    stringstyle=\color{TealAccent},
+    commentstyle=\color{TextMuted},
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    tabsize=4,
+    xleftmargin=6pt,
+    xrightmargin=6pt,
+    aboveskip=5pt,
+    belowskip=5pt,
+    columns=flexible
+}
+
+% ==================== 表格設定 ====================
+\renewcommand{\arraystretch}{1.24}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\begin{document}
+
+% ==================== 封面抬頭橫幅 ====================
+\begin{tcolorbox}[
+    enhanced,
+    colback=NavyPrimary,
+    colframe=NavyPrimary,
+    arc=4pt,
+    left=14pt, right=14pt, top=14pt, bottom=14pt
+]
+    {\small\color{SlateBorder}完整技術執行計畫書（修正精簡定案版 v2.1｜專注法說會情緒特徵與多模態量化建模）}\\[6pt]
+    {\LARGE\bfseries\color{white}聽音辨勢：結合美股法說會大型語言模型語義特徵與市場狀態之股價報酬及波動率預測系統}\\[10pt]
+    {\small\color{white}
+    \textbf{組別與成員}：第七組（114064529 彭莅翔、114064535 江孟霖、114064519 黃啟銜、112191073 黃文妤）\\[2pt]
+    \textbf{適用市場與區間}：美股 S\&P 500 產業均衡成分股（100 至 150 檔 $\times$ 2016--2026 年，共約 4,000 至 6,000 場法說會）\\[2pt]
+    \textbf{文件日期}：2026 年 11 月 25 日 \quad|\quad \textbf{硬體需求}：16 GB RAM、5 GB 硬碟（免 GPU、免雲端伺服器）
+    }
+\end{tcolorbox}
+
+\vspace{4pt}
+
+\begin{summarybox}{本版計畫書核心定位與執行總綱}
+本文件整合原《期中報告》之財務量化研究框架與《本地多模態資料庫建置報告》之資料工程架構，將現階段範疇嚴格聚焦於\textbf{「法說會 LLM 情緒與語義特徵抽取＋市場狀態多模態量化預測模型」}（RAG 向量檢索系統先行移出本階段，待核心量化模型與實證定案後再行擴充），並全面修正先前審查發現的 \textbf{6 項關鍵量化與實作風險}（隔夜跳空前視偏差、JSON 與 Logprobs 衝突、缺乏硬財報驚喜對照、滾動視窗統計洩漏、重複切塊嵌入負擔及學期範疇過大）。\\
+全案採取\textbf{「垂直切面（Vertical Slice）MVP 先行」}策略：先以 200 場小樣本驗證時間對齊與 Prompt 一致性，再擴展至全量 4,000+ 場歷史資料並透過\textbf{模型知識截止日後之嚴格樣本外期間（2025--2026 年）}檢驗無前視偏差之真實 Alpha，同時附上完整資料源、API 申請與程式碼操作指南。
+\end{summarybox}
+
+\vspace{2pt}
+\setcounter{tocdepth}{2}
+{\small\setlength{\parskip}{1pt}\linespread{1.05}\selectfont\tableofcontents}
+\newpage
+
+% ======================================================================
+% 第一章：原計畫關鍵問題診斷與修正定案
+% ======================================================================
+\section{原計畫關鍵問題診斷與核心修正總覽}
+
+在正式投入開發前，我們針對原版企劃的財務計量邏輯、LLM 呼叫相容性與工程工期進行嚴格壓力測試，辨識出 6 項足以導致「回測虛假高 Alpha」或「開發中途卡關」的關鍵缺陷，並於本版全面修正，彙整如表~\ref{tab:revisions} 所示。
+
+\begin{table}[htbp]
+\centering
+\caption{原計畫缺陷診斷與本版修正定案對照表}
+\label{tab:revisions}
+\footnotesize
+\renewcommand{\arraystretch}{1.22}
+\begin{tabularx}{\textwidth}{>{\bfseries}P{2.25cm} Y Y Y}
+\toprule
+修正項目 & 原計畫設計與潛在風險 & 本版修正定案 & 修正原因（Why） \\
+\midrule
+1. PEAD 進出場價格界線 &
+僅將盤後（AMC）映射至隔日 $t=0$，未明確區分開／收盤進出場點，易誤將 $t=-1$ 收盤至 $t=0$ 開盤之\textbf{隔夜跳空}計入報酬。 &
+明確定義：\texttt{pre\_car} 截斷至 $\text{Close}(t-1)$；\texttt{target\_pead} 嚴格由 $\text{Close}(t=0)$ 起算至 $\text{Close}(t+10/20)$（附 $\text{Open}(t=0)$ 敏感度分析）。 &
+法說會多於盤後結束，隔夜跳空屬於即時定價而非可交易之價格漂移（PEAD）；此修正徹底杜絕隱性前視偏差。 \\
+\midrule
+2. LLM 抽取與 QoQ 計算 &
+欲對萬字全文一次輸出多欄位 JSON 連續分數並同步取 Token Logprobs；且擬將兩季全文同時輸入計算 \texttt{QoQ\_Tone\_Shift}。 &
+改採\textbf{離散 1--5 分錨點評分＋關鍵證據引文}（可選單一分類 token 取 Logprobs 期望值）；\texttt{QoQ\_Tone\_Shift} 改在下游以數值差分與向量餘弦距離計算。 &
+DeepSeek 原生 API 僅支援 \texttt{json\_object}，多欄位浮點 JSON 無法正確還原 Logprobs；單季獨立評分可省 50\% Token 成本且避免長文本注意力稀釋，引文更可直接供給儀表板標註。 \\
+\midrule
+3. 硬財報驚喜（SUE）對照 &
+特徵表僅含語義與量價特徵，未控制標準化未預期盈餘（EPS Surprise），難以反駁「LLM 只是讀出財報數字」之質疑。 &
+補抓個股歷史 EPS 實際值與市場共識值，計算 \texttt{eps\_surprise}，並建立\textbf{四組消融實驗（Ablation Study）}。 &
+符合 Meursault et al. (2023) 學術規範，證明管理層「軟語氣與迴避度」在控制硬財報數字後仍具備獨立增量預測力。 \\
+\midrule
+4. 防前視偏差與統計洩漏 &
+過度依賴 \texttt{en\_core\_web\_sm} NER 去識別化；靜態寬表預先計算 \texttt{expectation\_gap\_z} 易造成全樣本分布洩漏；忽略存活者偏差。 &
+(a) 保留增強版遮蔽字典，但改以\textbf{模型知識截止日後（2025--2026）}為黃金驗證集；(b) 所有 Z-Score 與 TF-IDF 嚴格置於 Walk-Forward 訓練視窗內擬合；(c) 採橫斷面多空 RankIC 並揭露下市股限制。 &
+輕量 NER 無法遮蔽產品名（如 iPhone、Blackwell）與宏觀事件（如 COVID-19）；只有 Post-Cutoff 樣本外檢驗與嚴格滾動標準化才能證明零洩漏。 \\
+\midrule
+5. 聚焦核心：暫緩 RAG 並改用區段級 Embedding &
+前期同時建置 14 萬筆切塊之 LanceDB RAG 索引與文件級語義向量，造成儲存體積膨脹與工程發散。 &
+\textbf{本階段移除 RAG 模組}；善用 \texttt{voyage-finance-2} 支援 32K 長上下文，直接對 Prepared 與 Q\&A 雙區段計算 1,024 維向量並存於 \texttt{04\_features/}。 &
+直接消除向量資料庫切塊、索引維護與重複 API 呼叫成本，硬碟需求由 10 GB 降至 5 GB 以下，讓團隊全心打磨核心量化模型。 \\
+\midrule
+6. 範疇收斂與期程統一 &
+前期同步開發 Hugging Face、defeatbeta、Motley Fool Playwright、SEC 8-K；預測期程在 10--30 天間不一致。 &
+統一預測期程為 \textbf{10 與 20 交易日}；採\textbf{兩階段 MVP 推進}：Phase 1 僅用 HF 主庫 + yfinance 打通全管線；Phase 2 再接 defeatbeta 與儀表板；Playwright/8-K 降為選配。 &
+避免團隊在反爬蟲與外圍工程耗盡學期時間，確保前 3 週即產出可驗證之量化模型與完整回測實證。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ======================================================================
+% 第二章：系統總體架構與本地多模態 Lakehouse 設計
+% ======================================================================
+\section{系統總體架構與本地多模態資料倉儲設計}
+
+本系統採\textbf{「輕量本地資料倉儲（Local Lakehouse）＋單向資料血緣」}架構，確保原始資料、清洗對齊結果、API 快取狀態與下游量化特徵完全解耦。整體架構與資料流如圖~\ref{fig:arch} 所示。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.6cm and 0.75cm,
+    box/.style={rectangle, rounded corners=3pt, draw=NavyPrimary, thick, fill=SlateBg, align=center, font=\footnotesize, inner sep=5pt, minimum height=1.25cm},
+    src/.style={box, draw=BlueAccent, fill=white, minimum width=3.55cm},
+    lake/.style={box, draw=NavyPrimary, fill=SlateBg, minimum width=4.25cm},
+    cons/.style={box, draw=TealAccent, fill=GreenBg, minimum width=4.6cm},
+    cache/.style={box, draw=AmberBorder, fill=AmberBg, minimum width=4.25cm},
+    arr/.style={-{Stealth[length=2.2mm]}, thick, color=NavyPrimary},
+    darr/.style={-{Stealth[length=2.2mm]}, thick, dashed, color=AmberBorder}
+]
+
+% Left Column: Sources
+\node[src] (s1) {\textbf{Layer 1 歷史主庫（Phase 1）}\\Hugging Face \texttt{kurry/sp500}\\(\texttt{streaming=True}, 2016--2025)};
+\node[src, below=of s1] (s2) {\textbf{Layer 2 增量庫（Phase 2）}\\\texttt{defeatbeta-api}\\(2025--2026 Post-Cutoff 測試集)};
+\node[src, below=of s2] (s3) {\textbf{結構化市場與財報源}\\\texttt{yfinance} (OHLCV / \^{}GSPC / \^{}VIX)\\+ EPS Surprise + NYSE 日曆};
+
+% Middle Column: Lakehouse
+\node[lake, right=0.85cm of s1] (l1) {\textbf{01\_raw 原始只讀層}\\\texttt{transcripts\_raw/year=*/}\\ \texttt{market\_ohlcv} / \texttt{eps\_sue.parquet}};
+\node[lake, below=of l1] (l2) {\textbf{02\_clean 清洗對齊層}\\雙區塊切分 (Prepared / Q\&A)\\+ 增強去識別版與原文版並存\\+ 嚴格 NYSE $t=0$ 對齊};
+\node[cache, below=of l2] (l3) {\textbf{03\_cache 斷點續傳快取}\\\texttt{api\_extract\_cache.jsonl}\\\texttt{pipeline\_state.sqlite}};
+
+% Right Column: Consumers
+\node[cons, right=1.35cm of l1] (c1) {\textbf{上游管線 A：LLM 離散評分與引文}\\輸入：去識別化文本\\DeepSeek-V3 / GPT-4o-mini\\(產出 4 大原生指標 + 證據引文)};
+\node[cons, below=of c1] (c2) {\textbf{上游管線 B：區段級金融 Embedding}\\輸入：Prepared / Q\&A 雙區段\\\texttt{voyage-finance-2} (32K 直入)\\產出 1,024 維向量與跨季偏移};
+\node[cons, below=of c2] (c3) {\textbf{下游核心：量化建模與儀表板}\\DuckDB 合併 \texttt{04\_features/}\\Walk-Forward LightGBM/CatBoost\\(滾動 Z-Score + SUE 消融 + SHAP)};
+
+% Arrows
+\draw[arr] (s1.east) -- (l1.west);
+\draw[arr] (s2.east) -- ($(l1.west)+(0,-0.25)$);
+\draw[arr] (s3.east) -- ($(l1.west)+(0,-0.45)$);
+
+\draw[arr] (l1.south) -- (l2.north);
+\draw[arr] ($(l2.east)+(0,0.22)$) -- ++(0.35,0) |- ($(c1.west)+(0,-0.1)$);
+\draw[arr] (l2.east) -- (c2.west);
+
+% Clean routed arrow from 02_clean to Consumer C in the gutter (zero box overlap)
+\draw[arr] ($(l2.east)+(0,-0.32)$) -- ++(0.55,0) |- ($(c3.west)+(0,0.25)$)
+    node[pos=0.35, right=1pt, font=\scriptsize, color=NavyPrimary, fill=white, inner sep=1pt]{量價/SUE};
+
+% Cache dashed arrows (cleanly routed)
+\draw[darr] ($(c1.south west)+(0.45,0)$) -- ++(0,-0.18) -| ($(l3.east)+(0.22,0)$) -- (l3.east);
+\draw[darr] ($(l3.east)+(0,-0.22)$) -- ($(c3.west)+(0,-0.22)$) node[midway, below=1pt, font=\scriptsize, color=AmberBorder]{LLM 特徵彙整};
+
+% Embedding shift
+\draw[arr] (c2.south) -- (c3.north) node[midway, right=2pt, font=\scriptsize, color=TealAccent]{跨季語義偏移};
+
+\end{tikzpicture}
+\caption{修正後本地多模態 Lakehouse、雙區段語義抽取與量化建模架構圖（聚焦核心版）}
+\label{fig:arch}
+\end{figure}
+
+\subsection{標準專案目錄結構}
+所有組員應透過 Git 同步程式碼與設定檔（\texttt{data/} 與 \texttt{.env} 列入 \texttt{.gitignore}），目錄配置如下：
+\begin{lstlisting}[language=bash]
+FinTech/
+├── .env                          # 存放 API Keys (嚴禁上傳 Git)
+├── .env.example                  # API Key 範例模板
+├── requirements.txt              # 鎖定套件版本
+├── config/
+│   ├── universe.json             # 100-150 檔目標標的、GICS 板塊與更名映射 (FB->META)
+│   ├── redact_dict.json          # 各公司專屬品牌/產品/高管補充遮蔽字典
+│   └── prompts/                  # 版本化 Prompt 模板 (extract_v1.yaml)
+├── src/
+│   ├── 00_probe_dataset.py       # 第 0 步：HF 資料探勘與時間戳驗證腳本
+│   ├── 01_etl_transcripts.py     # Layer 1 串流與 Layer 2 增量抓取
+│   ├── 02_etl_market_sue.py      # yfinance 量價、VIX、EPS Surprise 與 NYSE 日曆
+│   ├── 03_clean_and_align.py     # Q&A 切分、去識別化、嚴格 t=0 對齊與品質檢核
+│   ├── 04_llm_extract.py         # Async Batch 呼叫、JSONL 快取與一致性檢定
+│   ├── 05_embed_sections.py      # Prepared / Q&A 雙區段 Embedding 與跨季餘弦偏移
+│   ├── 06_build_features.py      # DuckDB 合併純數值特徵表與嚴格 PEAD/RV 標籤
+│   └── 07_train_backtest.py      # Walk-Forward 滾動訓練、四組消融實驗與 SHAP 歸因
+├── app/
+│   └── streamlit_app.py          # 互動式語義體檢、預期差訊號、SHAP 歸因與回測儀表板
+└── data/
+    ├── 01_raw/                   # 只進不出原始分區 Parquet
+    ├── 02_clean/                 # 清洗對齊後主表（原文版＋去識別版）
+    ├── 03_cache/                 # api_extract_cache.jsonl 與 pipeline_state.sqlite
+    └── 04_features/              # llm_features / market_features / model_base.parquet
+\end{lstlisting}
+
+\begin{whybox}[為何採用混合儲存格式（Parquet + JSONL/SQLite + DuckDB）？]
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+    \item \textbf{Parquet（原始／清洗／特徵主庫）}：欄式二進位格式具 Zstd 壓縮（4,000 場由 600 MB 壓至 150--200 MB），保留巢狀陣列與 1,024 維向量型別，且量化回測時僅讀取數值欄位（Column Pruning），RAM 消耗低於 20 MB，並避免 Windows NTFS 數千個 \texttt{.txt} 小檔案 I/O 鎖死問題。
+    \item \textbf{JSONL + SQLite（API 狀態快取）}：Parquet 為不可變檔案，絕不可每呼叫一次 API 就覆寫整檔；JSONL 支援逐行附加（Append-Only），SQLite 提供 ACID 狀態鎖定，中途斷網或觸發限流可秒級斷點續傳。
+    \item \textbf{DuckDB（零拷貝跨表查詢）}：直接以 SQL 對多個分區 Parquet 執行 JOIN 與資料稽核，免全量載入 Pandas，極適合筆電端快速迭代特徵與回測驗證。
+    \item \textbf{保留後續擴充彈性}：完整保留 \texttt{02\_clean} 原文分區 Parquet，待量化系統完成後，隨時可直接讀取該層建立 RAG 向量索引，無需重新下載或清洗任何資料。
+\end{itemize}
+\end{whybox}
+
+% ======================================================================
+% 第三章：完整端到端執行流程（怎麼做最好與為什麼）
+% ======================================================================
+\section{完整端到端執行流程：最佳實踐與設計理由}
+
+本專案劃分為 \textbf{7 個標準化階段（Stage 0 至 Stage 6）}。每個階段皆規範「最佳作法（How）」、「設計依據（Why）」與「強制驗收門檻（Verification Gate）」，未通過前一步驗收絕不進入全量 API 消耗階段。
+
+\subsection{Stage 0：環境建置與資料品質前置探勘（第 1--2 天）}
+
+\subsubsection{最佳作法（How）}
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item 建立獨立 Python 3.11 虛擬環境並安裝鎖定版本之核心套件（詳見第四章）。
+    \item 撰寫 \texttt{src/00\_probe\_dataset.py}，以 \texttt{streaming=True} 抽檢 \texttt{kurry/sp500\_earnings\_transcripts} 前 200 筆與 2016、2020、2024 年各 20 筆紀錄，實測並印出：
+    \begin{itemize}[leftmargin=1.2em]
+        \item \texttt{date} 欄位是否皆含時分秒（如 \texttt{17:00:00}）或於早期年份退化為 \texttt{00:00:00}。
+        \item 抽檢 10 檔固定盤後（AAPL、NVDA、MSFT、META、AMZN）與盤前（JPM、BAC、UNH、JNJ、PG）召開之標的，核對其原始時間戳對應之實際時區（UTC 或美東時間）。
+        \item 統計 2016--2025 年每季皆有完整紀錄之標的清單，從中依 GICS 11 大板塊均衡挑選 \textbf{100 至 150 檔美股}寫入 \texttt{config/universe.json}，同時列出更名映射（如 \texttt{FB}$\rightarrow$\texttt{META}、\texttt{ANTM}$\rightarrow$\texttt{ELV}、\texttt{FISV}$\rightarrow$\texttt{FI}）。
+    \end{itemize}
+\end{enumerate}
+
+\begin{whybox}
+公開開源金融資料集最常見的致命傷是「欄位格式與文件描述不符」或「早期年份缺失時分秒」。花 2 小時先做探勘腳本，能精準決定時間校準規則與股票池構成，避免寫完上千行管線才發現時間戳全是 UTC 或無小時資訊而全部重工。
+\end{whybox}
+
+\begin{gatebox}
+\textbf{通過條件}：產出探勘報告確認 (1) 原始時間戳時區、(2) 目標 100--150 檔股票於 2016--2025 年平均完整度達 90\% 以上、(3) \texttt{config/universe.json} 定案並簽入 Git。
+\end{gatebox}
+
+% ----------------------------------------------------------------------
+\subsection{Stage 1：多模態原始資料擷取（01\_raw 建置）}
+
+\subsubsection{最佳作法（How）}
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{Phase 1（歷史逐字稿主庫）}：以串流模式遍歷 \texttt{kurry/sp500\_earnings\_transcripts}，僅保留命中 \texttt{universe.json}（含舊代碼映射後統一轉換為新代碼）且 \texttt{year >= 2016} 之紀錄；丟棄冗餘之純文字 \texttt{content} 欄位，僅保留 \texttt{symbol, year, quarter, date, structured\_content}，依年份寫入 \texttt{data/01\_raw/transcripts\_raw/year=YYYY/part.parquet}。
+    \item \textbf{Phase 1（市場量價、大盤與硬財報 SUE）}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item 呼叫 \texttt{yfinance.download(..., auto\_adjust=True)} 抓取 2015-01-01 至 2026-11-24 之個股還原日 K（OHLCV）、\texttt{\^{}GSPC}（S\&P 500）與 \texttt{\^{}VIX}（恐慌指數），存入 \texttt{market\_ohlcv\_raw.parquet} 與 \texttt{macro\_index\_raw.parquet}。
+        \item 同步透過 \texttt{yfinance} 之 \texttt{Ticker.earnings\_dates}（並以 \texttt{defeatbeta-api} 財報表補缺）擷取歷史 EPS 共識預期值（\texttt{eps\_estimate}）與實際公布值（\texttt{eps\_actual}），存入 \texttt{eps\_sue\_raw.parquet}。
+        \item 透過 \texttt{pandas\_market\_calendars.get\_calendar("NYSE")} 建立 2015--2027 年完整正式開盤日曆表。
+    \end{itemize}
+    \item \textbf{Phase 2（增量逐字稿補齊，用於 Post-Cutoff 嚴格測試集）}：掃描 \texttt{01\_raw} 各股最新場次，呼叫 \texttt{defeatbeta-api} 補齊 2025--2026 年最新季度。因企業財年定義不同（例如 AAPL 9 月結算、NVDA 1 月結算），去重必須採\textbf{雙重主鍵條件}：(1) 先依 \texttt{(symbol, year, quarter)} 去重，(2) 再檢查同一標的兩筆紀錄若 \texttt{date} 相差 $\le 15$ 天即視為重複場次並保留較完整者。
+\end{enumerate}
+
+\begin{whybox}
+(1) 串流過濾可將下載與處理時之 RAM 峰值壓制在 1--2 GB（全量直接讀入 Pandas 會飆升至 15--25 GB 導致 OOM）。(2) \texttt{yfinance} 新版預設已改變 \texttt{auto\_adjust} 行為，顯式宣告 \texttt{auto\_adjust=True} 可保證除權息還原報酬一致。(3) 先不碰 Motley Fool 反爬蟲與 SEC 8-K 解析，能將 80\% 開發時間集中在真正產生研究價值的特徵抽取與量化建模上。
+\end{whybox}
+
+% ----------------------------------------------------------------------
+\subsection{Stage 2：雙區塊切分、增強去識別化與嚴格 Point-in-Time 對齊（02\_clean）}
+
+\subsubsection{最佳作法（How）}
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{雙區塊結構切分}：解析 \texttt{structured\_content} 陣列，偵測 Operator 宣告進入問答的規則模式（如 \texttt{Question-and-Answer}, \texttt{first question comes from}, \texttt{open the floor for questions}），精準切分為 \texttt{prepared\_remarks\_raw} 與 \texttt{qa\_session\_raw}。
+    \item \textbf{雙版本並存與增強版去識別化}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item \textbf{原文版（\texttt{*\_raw}）}：保留原始文字，專供人工抽查、BM25 詞頻驗證、儀表板呈現以及未來擴充模組使用。
+        \item \textbf{去識別版（\texttt{*\_anon}）}：結合三層遮蔽：(a) \texttt{config/redact\_dict.json} 精準替換該公司名稱、股票代碼、核心產品線與高管姓名；(b) 正則表達式遮蔽年份與季度（\texttt{2016--2026}、\texttt{Q1--Q4} 換為 \texttt{[CURRENT\_QUARTER]}）；(c) \texttt{spaCy en\_core\_web\_sm} 補捉其餘人名與組織名。
+    \end{itemize}
+    \item \textbf{品質過濾（軟刪除標記）}：對字數 $< 1,500$ 字、無 Q\&A 區段或明顯截斷之場次，不直接硬刪，而是標記 \texttt{is\_valid = False} 並紀錄 \texttt{exclude\_reason}，避免增量腳本重複抓回壞資料。
+    \item \textbf{嚴格美東時間與 PEAD 進出場對齊規則（核心修正！）}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item 統一將驗證後的原始時間戳轉為美東時間 \texttt{America/New\_York}。
+        \item 若時間早於當日美東 \texttt{09:30} 且當日為 NYSE 交易日（BMO 盤前）：事件交易日 $t=0$ 設為\textbf{當日}。
+        \item 若時間晚於或等於 \texttt{09:30}（含盤中、AMC 盤後）或為休市日，或原始資料缺時分秒無法確定盤前盤後：一律保守映射至\textbf{下一個 NYSE 交易日}作為 $t=0$。
+        \item \textbf{嚴格防隔夜跳空進出場界線}（見圖~\ref{fig:timeline}）：事前動能特徵嚴格截止於 $\text{Close}(t-1)$；事後 PEAD 標籤嚴格自 $\text{Close}(t=0)$ 進場持有至 $\text{Close}(t+H)$（$H \in \{10, 20\}$）。
+    \end{itemize}
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    tick/.style={thick, color=NavyPrimary},
+    lbl/.style={align=center, font=\scriptsize}
+]
+% Non-tradable gap highlight band
+\fill[AmberBg] (5.5, -0.22) rectangle (8.3, 0.22);
+\draw[AmberBorder, thin] (5.5, -0.22) rectangle (8.3, 0.22);
+
+% Main timeline axis
+\draw[-{Stealth[length=2.5mm]}, very thick, color=NavyPrimary] (0,0) -- (15.6,0);
+
+% Ticks
+\foreach \x/\t/\d in {
+    0.9/{$t-120$}/{會前半年},
+    3.2/{$t-20$}/{會前 1 個月},
+    5.5/{$t-1$}/{事件前收盤},
+    8.3/{$t=0$}/{事件交易日},
+    11.6/{$t+10$}/{持有 10 日},
+    14.7/{$t+20$}/{持有 20 日}
+}{
+    \draw[tick] (\x, 0.16) -- (\x, -0.16);
+    \node[below=5pt, lbl, color=NavyPrimary] at (\x, -0.16) {\textbf{\t}\\\color{TextMuted}\d};
+}
+
+% Event marker cleanly above everything
+\draw[very thick, color=RedAlert, dashed] (6.9, 1.95) -- (6.9, -0.25);
+\node[fill=RedBg, draw=RedAlert, rounded corners=2pt, inner sep=4pt, font=\scriptsize\bfseries, color=RedAlert, align=center] at (6.9, 2.45) {AMC 盤後法說會結束（或 BMO 09:30 前結束）};
+
+% Pre-event feature bracket
+\draw[decorate, decoration={brace, amplitude=6pt}, thick, color=BlueAccent] (0.9, 0.42) -- (5.45, 0.42)
+    node[midway, above=7pt, font=\scriptsize\bfseries, color=BlueAccent, align=center]{會前量價與預期特徵 (\texttt{pre\_car}, \texttt{drawdown})\\嚴格截止於 $\text{Close}(t-1)$};
+
+% Post-event PEAD bracket
+\draw[decorate, decoration={brace, amplitude=6pt}, thick, color=TealAccent] (8.35, 0.42) -- (14.7, 0.42)
+    node[midway, above=7pt, font=\scriptsize\bfseries, color=TealAccent, align=center]{可交易 PEAD 報酬與實現波動率標籤\\嚴格自 $\text{Close}(t=0)$ 進場 $\rightarrow \text{Close}(t+10/20)$ 出場};
+
+% Non-tradable gap callout cleanly below axis
+\draw[-{Stealth[length=2mm]}, thick, color=AmberBorder] (6.9, -1.2) -- (6.9, -0.25);
+\node[fill=AmberBg, draw=AmberBorder, rounded corners=2pt, inner sep=3.5pt, font=\scriptsize, color=AmberBorder, align=center] at (6.9, -1.65) {\textbf{隔夜跳空／當日消化區間}（不計入可交易 PEAD 報酬，杜絕前視偏差）};
+
+\end{tikzpicture}
+\caption{嚴格 Point-in-Time（BMO/AMC）事件對齊與零隔夜跳空 PEAD 進出場時間軸}
+\label{fig:timeline}
+\end{figure}
+
+\begin{gatebox}
+\textbf{通過條件}：隨機抽檢 10 筆不同板塊與年份的紀錄，人工核對真實財報日曆、Q\&A 切分起點、公司名稱遮蔽覆蓋率，確認 0 筆時間錯位與 0 筆資料洩漏。
+\end{gatebox}
+
+% ----------------------------------------------------------------------
+\subsection{Stage 3：LLM 情緒特徵抽取與區段級 Embedding 管線（03\_cache \& 04\_features）}
+
+\subsubsection{最佳作法（How）}
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{先跑 200 場 Pilot Set 校準，再跑全量}：先挑選 20 檔跨板塊股票近 10 季（約 200 場）進行 Prompt 驗證與重測信度測試（隨機挑 30 場重複跑 3 次，要求各指標皮爾森相關係數 $r > 0.90$ 且分數標準差合理，無全部集中於 3.5--4.0 之現象）。
+    \item \textbf{修正後之 LLM 結構化抽取設計（4 大原生維度＋證據引文）}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item 僅輸入去識別化後之 \texttt{prepared\_remarks\_anon} 與 \texttt{qa\_session\_anon}（單季獨立評分，不併入上季全文；不先摘要，避免 20--30\% Decision Flips）。
+        \item 採\textbf{精確錨點（Rubric-Anchored）1--5 離散等級評分}（搭配 \texttt{temperature=0}、固定 \texttt{seed} 與 JSON 輸出模式 \texttt{json\_object}），一次輸出四個原生分數與最關鍵的證據句（供儀表板警示標註）：
+        \begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
+            \item \texttt{optimism\_score}（1--5）：管理層對營運與需求之正向與樂觀程度。
+            \item \texttt{ambiguity\_score}（1--5）：措辭保留、不確定性與風險但書比例。
+            \item \texttt{guidance\_revision}（$-2$ 至 $+2$）：前瞻財測指引下調、維持或上調方向。
+            \item \texttt{qa\_evasiveness}（1--5）：Q\&A 環節管理層針對分析師尖銳提問之迴避與轉移話題程度。
+            \item \texttt{evidence\_quotes}：各 1--2 句代表「最樂觀承諾」與「最模糊／迴避」之原句。
+        \end{enumerate}
+        \item \textbf{選配進階校準（Logprobs 連續化）}：若欲驗證連續分數增益，可針對最核心的 \texttt{optimism\_score} 或 \texttt{qa\_evasiveness}，使用支援完整 \texttt{logprobs} 之端點（如 OpenAI \texttt{gpt-4o-mini}）以單一離散分類 token（\texttt{1}--\texttt{5}）呼叫，計算期望值 $\hat{s} = \sum_{k=1}^{5} p(k) \cdot k$。
+        \item 所有 API 回傳結果即時以 Append-Only 寫入 \texttt{api\_extract\_cache.jsonl} 並同步更新 \texttt{pipeline\_state.sqlite}，搭配 \texttt{asyncio.Semaphore(15)} 與指數退避重試機制。
+    \end{itemize}
+    \item \textbf{區段級金融語義 Embedding 與跨季偏移計算}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item 善用 \texttt{voyage-finance-2} 單次支援 \textbf{32,000 tokens} 的長上下文能力（一般法說會 Prepared 約 4,500 tokens、Q\&A 約 9,000 tokens），直接將兩大去識別化區段送入 API（僅當極少數單區段超長逾 28,000 tokens 時切分後字數加權平均），分別產出 1,024 維向量 $\mathbf{v}^{\text{prep}}_{i,t}$ 與 $\mathbf{v}^{\text{qa}}_{i,t}$。
+        \item 計算每家公司本季相對於上一季之區段級語義偏移量，連同 LLM 評分統一存入 \texttt{04\_features/llm\_features.parquet}：
+        \[
+            \texttt{emb\_cosine\_shift}^{(s)}_{i,t} = 1 - \frac{\mathbf{v}^{(s)}_{i,t} \cdot \mathbf{v}^{(s)}_{i,t-1}}{\|\mathbf{v}^{(s)}_{i,t}\| \|\mathbf{v}^{(s)}_{i,t-1}\|}, \quad s \in \{\text{prep}, \text{qa}\}
+        \]
+    \end{itemize}
+\end{enumerate}
+
+\begin{whybox}
+(1) 放棄讓 LLM 直接對兩季全文評 \texttt{QoQ\_Tone\_Shift}，將單次輸入壓在 10,000--15,000 tokens 內，不僅減半費用，也消除長上下文中段遺忘效應。(2) 強制要求輸出 \texttt{evidence\_quotes} 同時達成兩個目標：一是強迫模型先找依據再打分（類 Chain-of-Thought 提準度），二是直接支撐期末 Streamlit 儀表板的「語義體檢警示段落」功能。(3) 區段級直入 \texttt{voyage-finance-2} 既不需切分 14 萬個 Chunks 建向量庫，又能精準分離「準備發言偏移」與「問答環節偏移」，4,000 場全量幾乎落於 Voyage 5,000 萬免費額度內。
+\end{whybox}
+
+% ----------------------------------------------------------------------
+\subsection{Stage 4：無洩漏量化特徵工程與雙目標標籤（04\_features）}
+
+\subsubsection{最佳作法（How）}
+透過 DuckDB 依據 \texttt{(symbol, event\_trading\_date)} 合併語義特徵、市場量價與 EPS Surprise，產出基礎特徵表 \texttt{04\_features/model\_base.parquet}（詳見表~\ref{tab:features}）。
+
+\begin{table}[htbp]
+\centering
+\caption{修正後量化模型特徵與雙目標標籤規格表（零未來洩漏設計）}
+\label{tab:features}
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries}P{2.7cm} P{4.5cm} Y}
+\toprule
+特徵群組 & 核心欄位名稱 & 計算定義與財務建模意義 \\
+\midrule
+鍵值與切分索引（非預測特徵） &
+\texttt{event\_id, symbol, event\_trading\_date, gics\_sector, is\_valid} &
+供 Walk-Forward 時間切分、產業中性化對照與軟刪除過濾，嚴禁作為決策樹分裂特徵。 \\
+\midrule
+上游 LLM 語義與跨季偏移特徵 &
+\texttt{optimism\_score, ambiguity\_score, guidance\_revision, qa\_evasiveness, qoq\_opt\_diff, qoq\_amb\_diff, emb\_cosine\_shift\_prep, emb\_cosine\_shift\_qa} &
+由 LLM 抽取之管理層軟資訊；\texttt{qoq\_*\_diff} 為本季減上一季（及減近 4 季均值）之數值差分；\texttt{emb\_cosine\_shift\_*} 為準備發言與問答區段跨季向量餘弦距離。 \\
+\midrule
+稀疏模糊詞頻（視窗內擬合） &
+\texttt{bm25\_hedge\_ratio, lm\_uncertainty\_ratio} &
+結合 Loughran-McDonald 不確定詞表與「視窗內擬合」之 TF-IDF/BM25 權重，過濾公關免責聲明雜訊。 \\
+\midrule
+硬財報驚喜對照（新增控制變數） &
+\texttt{eps\_surprise\_pct, sue\_rank} &
+$(\text{EPS}_{\text{actual}} - \text{EPS}_{\text{est}}) / |\text{EPS}_{\text{est}}|$，用於消融實驗驗證軟資訊在控制硬財報後之獨立增量 Alpha。 \\
+\midrule
+事前量價預期與大盤狀態 &
+\texttt{pre\_car\_20d, pre\_car\_60d, pre\_car\_120d, drawdown\_120d, vol\_surge\_ratio, sp500\_ma120\_bias, vix\_level, vix\_chg\_20d} &
+嚴格截斷至 $\text{Close}(t-1)$，衡量法說會前市場期待水位、籌碼熱度與系統性牛熊／恐慌狀態。 \\
+\midrule
+滾動預期差（嚴格視窗內動態計算） &
+\texttt{expectation\_gap\_z} &
+\textbf{不在靜態寬表預算}！於 Walk-Forward 迴圈內，僅用 $t$ 日以前之歷史滾動均值／標準差計算：$Z(\texttt{optimism}) - Z(\texttt{pre\_car\_20d})$，捕捉「利多出盡」陷阱。 \\
+\midrule
+雙目標解耦標籤（統一 10 / 20 日） &
+\texttt{target\_pead\_10d, target\_pead\_20d, target\_rv\_10d, target\_rv\_20d} &
+\texttt{target\_pead\_H} $= R^{\text{stock}}_{0\to H} - R^{\text{SP500}}_{0\to H}$（自 $\text{Close}(t=0)$ 起算超額報酬）；\texttt{target\_rv\_H} $= \sqrt{252}\cdot\text{std}(r_{1..H})$（事後年化實現波動率）。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ----------------------------------------------------------------------
+\subsection{Stage 5：Walk-Forward 雙目標建模、四組消融實驗與回測驗證}
+
+\subsubsection{最佳作法（How）}
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{滾動擴張視窗（Expanding Walk-Forward Validation）與 Post-Cutoff 獨立檢驗}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item \textbf{滾動回測區間（2019--2024）}：初始訓練集 2016--2018（3 年），逐年（或逐季）向前推進訓練與驗證，所有 Z-Score 與 TF-IDF 轉換器均封裝於 \texttt{sklearn.pipeline.Pipeline}，確保每次僅在 \texttt{Train Fold} 上 \texttt{fit}，再對 \texttt{Test Fold} \texttt{transform}；並在 Train 與 Test 之間加入 \textbf{20 個交易日淨空期（Purge Gap）}，防止最後 20 天的標籤重疊至測試期。
+        \item \textbf{嚴格無前視偏差測試集（Post-Cutoff OOS：2025--2026）}：以 2016--2024 訓練完成之最終模型，單次預測商業 LLM 知識截止日之後的全新法說會，作為防預訓練洩漏的最高規格實證。
+    \end{itemize}
+    \item \textbf{雙目標解耦建模（LightGBM / CatBoost）}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item \textbf{報酬預測模型}：採用較淺樹深（\texttt{max\_depth=3..4}, \texttt{num\_leaves=7..15}, \texttt{min\_child\_samples=40}, L1/L2 正則化）搭配 Huber Loss 或排序目標（LambdaRank／橫斷面去均值超額報酬），避免數千筆金融樣本過擬合。
+        \item \textbf{波動率預測模型}：以 $\log(\texttt{target\_rv\_H})$ 為預測目標（緩解波動率右偏分佈），加入會前 20 日實現波動率 \texttt{pre\_rv\_20d} 作為基準特徵，檢驗 \texttt{ambiguity\_score} 與 \texttt{qa\_evasiveness} 對波動率放大的增量解釋力。
+    \end{itemize}
+    \item \textbf{強制執行四組消融實驗（Ablation Study）}：
+    \begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
+        \item \textbf{M1（純量價＋大盤）}：僅輸入會前量價與 VIX / S\&P 500 指標。
+        \item \textbf{M2（量價＋硬財報 SUE）}：M1 加入 \texttt{eps\_surprise\_pct}。
+        \item \textbf{M3（純 LLM 語義＋模糊詞頻）}：僅輸入文本語義與偏移特徵。
+        \item \textbf{M4（完整多模態融合模型）}：M2 + M3 + 動態 \texttt{expectation\_gap\_z}。
+    \end{enumerate}
+    \item \textbf{金融績效評估與 SHAP 可解釋性}：
+    \begin{itemize}[leftmargin=1.2em]
+        \item 報酬模型評估：橫斷面 Spearman \textbf{RankIC}、ICIR、每季依預測分數切五分位（Q5 多頭 $-$ Q1 空頭）之\textbf{多空累積報酬曲線}、年化夏普率（Sharpe Ratio）、最大回撤（Max Drawdown），並計入單邊 10 bps 交易成本。
+        \item 波動率模型評估：樣本外 $R^2$、QLIKE Loss、RMSE，以及預測「前 20\% 高波動異常事件」之 ROC-AUC。
+        \item 使用 \texttt{TreeSHAP} 繪製 Global Summary Plot、Dependence Plot（驗證「高 \texttt{pre\_car\_20d} $\times$ 高 \texttt{ambiguity\_score} $\rightarrow$ 負報酬」之利多出盡交互效應）與單場 Waterfall Plot。
+    \end{itemize}
+\end{enumerate}
+
+\begin{whybox}
+(1) 加入 20 日 Purge Gap 是金融時間序列交叉驗證（López de Prado, \textit{AFML}）的黃金標準，防止訓練期最後一週事件的 20 日報酬標籤跨入測試期造成洩漏。(2) 強制做 M1--M4 消融實驗與 Post-Cutoff OOS 測試，能直接堵死指導教授與評審最常提出的兩大質疑（「是否只是 EPS 驚喜？」與「LLM 是否早就背過歷史股價？」）。
+\end{whybox}
+
+% ----------------------------------------------------------------------
+\subsection{Stage 6：Streamlit 互動式語義體檢與量化回測儀表板（Phase 2 產出）}
+
+\subsubsection{最佳作法（How）}
+建立單頁多標籤之 \texttt{app/streamlit\_app.py}，聚焦呈現情緒特徵與量化預測成果（提供三大核心互動模組）：
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{法說會語義體檢面板}：可選擇資料庫歷史場次或上傳最新逐字稿，即時繪製 4 大語義維度雷達圖（疊加本季 vs. 上季對比），並直接高光展示 LLM 擷取之「最樂觀承諾」與「最模糊／迴避警示」關鍵原句。
+    \item \textbf{預期差與雙維度預測訊號儀表}：串接 \texttt{yfinance} 自動抓取該股會前 20/60/120 日超額報酬與當前 VIX 水位，呼叫訓練完成之 LightGBM 模型輸出「10/20 日超額報酬分位燈號（看多／利多出盡警示／觀望）」與「事後波動率放大預警」，並即時繪製單場 \textbf{SHAP Waterfall 歸因圖}。
+    \item \textbf{消融回測與 Post-Cutoff 實證報告頁籤}：互動式呈現 M1--M4 四組消融實驗之樣本外多空累積報酬曲線、各年度 RankIC / Sharpe 熱力圖、2025--2026 Post-Cutoff 獨立驗證結果以及全局 SHAP 交互依賴圖。
+\end{enumerate}
+
+% ======================================================================
+% 第四章：完整資源獲取與 API 使用實作手冊
+% ======================================================================
+\clearpage
+\section{所有必要資源、資料源與 API 獲取及使用手冊}
+
+本章整理完成本計畫所需的全部資料來源、LLM 與 Embedding API、套件依賴與預算估算，提供具體的註冊網址、金鑰設定方式與可直接改寫執行的 Python 程式碼範本。
+
+\subsection{法說會逐字稿與市場資料獲取方式}
+
+\begin{table}[H]
+\centering
+\caption{全專案外部資料來源與獲取規範總表}
+\label{tab:data_sources}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\bfseries}P{2.4cm} P{4.3cm} P{2.4cm} Y}
+\toprule
+資料類別 & 來源與套件 & 費用與權限 & 獲取方式與核心注意事項 \\
+\midrule
+歷史法說會主庫（Layer 1） &
+Hugging Face\newline{\scriptsize\texttt{kurry/sp500\_earnings\_transcripts}} &
+免費（MIT 授權，選配免費 HF Token 加速） &
+以 \texttt{datasets} 套件設定 \texttt{streaming=True} 逐筆下載過濾。涵蓋 685 家企業、約 33,362 筆（2005--2025），含 \texttt{structured\_content} 發言人陣列。 \\
+\midrule
+增量與最新逐字稿（Layer 2） &
+Python 套件\newline\texttt{defeatbeta-api} &
+免費開源（免限速） &
+執行 \texttt{pip install -U defeatbeta-api}（建議 $\ge 0.0.61$），底層由 Hugging Face + DuckDB 驅動，專用於補齊 2025--2026 年 Post-Cutoff 測試集與財報數據。 \\
+\midrule
+個股 K 線、大盤與 EPS 驚喜 &
+Python 套件\newline\texttt{yfinance} &
+免費（建議每批間隔 0.3 秒防限流） &
+以 \texttt{auto\_adjust=True} 下載個股還原日 K、\texttt{\^{}GSPC}、\texttt{\^{}VIX}；透過 \texttt{Ticker.earnings\_dates} 抓取歷史 EPS 預期與實際值計算 SUE。 \\
+\midrule
+美股開盤交易日曆 &
+Python 套件\newline\texttt{pandas\_market\_calendars} &
+免費開源（離線可用） &
+載入 \texttt{NYSE} 官方交易日表（含國定假日與休市日），作為盤前／盤後事件日 $t=0$ 映射與 $t\pm H$ 交易日偏移之唯一基準。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Layer 1 逐字稿串流下載程式碼範本}
+\begin{lstlisting}[language=Python]
+import json
+from datasets import load_dataset
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+with open("config/universe.json", "r", encoding="utf-8") as f:
+    uni = json.load(f)
+target_symbols = set(uni["symbols"])
+rename_map = uni["rename_map"]  # 例如 {"FB": "META", "ANTM": "ELV"}
+
+# 嚴格啟用 streaming=True，將記憶體峰值控制在 1-2 GB 內
+ds = load_dataset("kurry/sp500_earnings_transcripts", split="train", streaming=True)
+
+buffers_by_year = {}
+for row in ds:
+    sym = rename_map.get(row["symbol"], row["symbol"])
+    yr = int(row["year"])
+    if sym not in target_symbols or yr < 2016:
+        continue
+    # 僅保留必要欄位，直接捨棄冗餘 content 全文以省空間
+    rec = {
+        "event_id": f"{sym}_{yr}_Q{row['quarter']}",
+        "symbol": sym,
+        "year": yr,
+        "quarter": int(row["quarter"]),
+        "raw_date": str(row["date"]),
+        "structured_content": row["structured_content"],
+    }
+    buffers_by_year.setdefault(yr, []).append(rec)
+
+for yr, rows in buffers_by_year.items():
+    table = pa.Table.from_pylist(rows)
+    pq.write_table(table, f"data/01_raw/transcripts_raw/year={yr}/part.parquet", compression="zstd")
+\end{lstlisting}
+
+\subsubsection{Layer 2 增量資料（defeatbeta-api）與市場數據（yfinance）使用範例}
+\begin{lstlisting}[language=Python]
+import yfinance as yf
+import pandas_market_calendars as mcal
+from defeatbeta_api.data.ticker import Ticker
+
+# 1. 下載市場還原日 K 與大盤指數 (顯式指定 auto_adjust=True)
+prices = yf.download(["AAPL", "NVDA", "^GSPC", "^VIX"], start="2015-01-01", auto_adjust=True)
+
+# 2. 取得 EPS Surprise 歷史紀錄
+aapl_yf = yf.Ticker("AAPL")
+eps_df = aapl_yf.get_earnings_dates(limit=48)  # 涵蓋過去約 12 年季度財報
+
+# 3. 取得 NYSE 交易日曆
+nyse = mcal.get_calendar("NYSE")
+valid_days = nyse.valid_days(start_date="2015-01-01", end_date="2027-12-31").tz_convert("America/New_York")
+
+# 4. 透過 defeatbeta-api 查詢最新季度資料 (依安裝版本確認 transcript 方法名稱)
+db_ticker = Ticker("AAPL")
+latest_price = db_ticker.price()
+\end{lstlisting}
+
+% ----------------------------------------------------------------------
+\subsection{大型語言模型與金融 Embedding API 獲取與使用指南}
+
+本專題採用「低成本商業 API＋本地快取」策略，無需購買高階 GPU 主機。各項 API 申請方式與定位如下：
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{主力 LLM 特徵抽取：DeepSeek API（\texttt{deepseek-chat} / DeepSeek-V3）}
+    \begin{itemize}[leftmargin=1.2em]
+        \item \textbf{獲取方式}：前往 \url{https://platform.deepseek.com} 註冊帳號、儲值最低額度（約 \$10 USD 即可跑完全案並留餘裕）並於 \textit{API Keys} 頁面建立金鑰，寫入 \texttt{.env} 之 \texttt{DEEPSEEK\_API\_KEY}。
+        \item \textbf{優勢與使用要點}：完全相容 OpenAI Python SDK（僅需將 \texttt{base\_url} 設為 \texttt{https://api.deepseek.com}）；內建 Prompt Prefix Cache 自動折扣（系統提示詞與評分規準可省快取費用）；設定 \texttt{json\_object} 輸出模式並於 System Prompt 明確定義 JSON 鍵值與 1--5 錨點定義。
+    \end{itemize}
+    \item \textbf{備援／Logprobs 校準 LLM：OpenAI Batch API（\texttt{gpt-4o-mini}）}
+    \begin{itemize}[leftmargin=1.2em]
+        \item \textbf{獲取方式}：前往 \url{https://platform.openai.com} 儲值（\$5--\$10 USD）並取得 \texttt{OPENAI\_API\_KEY}。
+        \item \textbf{優勢與使用要點}：若採 \textbf{Batch API}（24 小時離峰批次處理），費用直接享 \textbf{50\% 折扣}，且原生支援嚴格 \texttt{json\_schema} 驗證與 \texttt{logprobs=True, top\_logprobs=5}。建議用來對 Pilot Set 做跨模型一致性校準，或作為 DeepSeek 異常時之備援。
+    \end{itemize}
+    \item \textbf{金融專用 Embedding：Voyage AI（\texttt{voyage-finance-2}）}
+    \begin{itemize}[leftmargin=1.2em]
+        \item \textbf{獲取方式}：前往 \url{https://dash.voyageai.com} 註冊帳號，新帳號即享 \textbf{5,000 萬免費 Tokens}（專用於 \texttt{voyage-finance-2} 等領域模型），超額費率為 \texttt{\$0.12 / 1M tokens}；建立金鑰後寫入 \texttt{VOYAGE\_API\_KEY}。
+        \item \textbf{使用要點}：單次輸入上限 \textbf{32,000 tokens}、輸出 1,024 維度，足以直接編碼整段 Prepared Remarks 或 Q\&A；統一設定 \texttt{input\_type="document"}，依每批 8--16 區段呼叫即可高速產出跨季語義偏移特徵。
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{安全金鑰管理（.env 範本）}
+\begin{lstlisting}[language=bash]
+# 檔案位置：FinTech/.env (必須加入 .gitignore，嚴禁外洩或 commit)
+DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxx
+VOYAGE_API_KEY=pa-xxxxxxxxxxxxxxxxxxxxxxxxxx
+HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+\end{lstlisting}
+
+\subsubsection{非同步批次抽取與 JSONL 斷點續傳快取程式碼範本}
+\begin{lstlisting}[language=Python]
+import os, json, asyncio
+from dotenv import load_dotenv
+from openai import AsyncOpenAI
+
+load_dotenv()
+client = AsyncOpenAI(
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com"
+)
+CACHE_PATH = "data/03_cache/api_extract_cache.jsonl"
+
+SYSTEM_PROMPT = """你是資深機構買方分析師。請僅依據去識別化法說會文本，嚴格輸出合法 JSON：
+{
+  "optimism_score": 1-5整數(1=極度悲觀, 3=中性, 5=極度樂觀),
+  "ambiguity_score": 1-5整數(1=極清晰具體, 5=充斥保留與不確定措辭),
+  "guidance_revision": -2至+2整數(-2=大幅下調, 0=維持/無指引, +2=大幅上調),
+  "qa_evasiveness": 1-5整數(1=直球回應, 5=明顯閃躲轉移分析師提問),
+  "optimistic_quote": "最樂觀承諾原句(限40字內)",
+  "evasive_quote": "最模糊或迴避提問原句(限40字內)"
+}"""
+
+def load_done_ids(path: str) -> set:
+    if not os.path.exists(path):
+        return set()
+    with open(path, "r", encoding="utf-8") as f:
+        return {json.loads(line)["event_id"] for line in f if line.strip()}
+
+async def extract_one(sem: asyncio.Semaphore, row: dict, lock: asyncio.Lock):
+    user_msg = f"[PREPARED REMARKS]\n{row['prepared_remarks_anon']}\n\n[Q&A]\n{row['qa_session_anon']}"
+    async with sem:
+        for attempt in range(3):
+            try:
+                resp = await client.chat.completions.create(
+                    model="deepseek-chat",
+                    temperature=0.0,
+                    response_format={"type": "json_object"},
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": user_msg},
+                    ],
+                )
+                parsed = json.loads(resp.choices[0].message.content)
+                record = {"event_id": row["event_id"], "prompt_ver": "v1", **parsed}
+                async with lock:
+                    with open(CACHE_PATH, "a", encoding="utf-8") as f:
+                        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+                return
+            except Exception:
+                await asyncio.sleep(2 ** attempt)
+\end{lstlisting}
+
+\subsubsection{區段級金融 Embedding 與跨季語義偏移計算範本}
+\begin{lstlisting}[language=Python]
+import os, numpy as np, voyageai
+
+vo = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+
+def embed_section(text: str, max_words: int = 18000) -> np.ndarray:
+    """善用 voyage-finance-2 32K 上下文直入區段文本；僅極少數超長區段分段加權平均"""
+    words = text.split()
+    if not words:
+        return np.zeros(1024, dtype=np.float32)
+    parts = [" ".join(words[i:i+max_words]) for i in range(0, len(words), max_words)]
+    weights = np.array([len(p.split()) for p in parts], dtype=np.float32)
+    res = vo.embed(parts, model="voyage-finance-2", input_type="document")
+    mat = np.asarray(res.embeddings, dtype=np.float32)
+    vec = np.average(mat, axis=0, weights=weights)
+    return vec / (np.linalg.norm(vec) + 1e-12)
+
+def cosine_shift(v_curr: np.ndarray, v_prev: np.ndarray) -> float:
+    return float(1.0 - np.dot(v_curr, v_prev))
+\end{lstlisting}
+
+% ----------------------------------------------------------------------
+\clearpage
+\subsection{全專案 Token 與成本預算精算}
+
+假設每場法說會平均 10,000 英文單字（約 13,500 輸入 Tokens），輸出結構化 JSON 與引文約 250 Tokens。在採用本版「單季獨立評分＋區段級 Embedding（暫緩 RAG）」精簡架構後，全專案預算如表~\ref{tab:budget} 所示，極度符合學生團隊低成本要求。
+
+\begin{table}[H]
+\centering
+\caption{全專案 API Token 用量與費用精算表（單季獨立評分＋區段級 Embedding）}
+\label{tab:budget}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\bfseries}P{3.2cm} P{2.4cm} P{3.3cm} P{3.2cm} Y}
+\toprule
+實驗規模 & 預估輸入 Tokens & LLM API 費用估算（DeepSeek / GPT Batch） & Voyage Finance Embedding 費用 & 預估總花費（USD / TWD） \\
+\midrule
+Pilot 驗證集\newline（200 場 $\times$ 2 次調優） &
+約 5.4M tokens &
+\$0.5 -- \$1.2 USD &
+\$0（免費額度內） &
+約 \textbf{\$1 USD}\newline（約 NT\$35） \\
+\midrule
+標準全量版（推薦）\newline（100 檔 $\times$ 10 年 = 4,000 場） &
+約 54M tokens &
+\$6 -- \$15 USD &
+\$0 -- \$1 USD\newline（幾乎落於 50M 免費額度） &
+約 \textbf{\$7 -- \$16 USD}\newline（約 NT\$230 -- \$520） \\
+\midrule
+擴展全量版\newline（150 檔 $\times$ 10 年 = 6,000 場） &
+約 81M tokens &
+\$10 -- \$22 USD &
+\$3.5 -- \$4.5 USD\newline（超額約 31M tokens） &
+約 \textbf{\$14 -- \$27 USD}\newline（約 NT\$450 -- \$880） \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{warnbox}{成本控管鐵律}
+\begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
+    \item \textbf{絕不未經 Pilot 驗證就直接全量跑 4,000 場}：所有 Prompt 修改與 Schema 調整皆須在 200 場 Pilot Set 鎖定後才擴大。
+    \item \textbf{嚴禁關閉快取或重複嵌入}：所有 LLM 回傳必須寫入 \texttt{api\_extract\_cache.jsonl}；區段級 Embedding 僅呼叫一次並持久化於 \texttt{04\_features/llm\_features.parquet}。
+\end{enumerate}
+\end{warnbox}
+
+% ----------------------------------------------------------------------
+\subsection{核心軟體依賴清單（requirements.txt）}
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\scriptsize\color{TextDark}]
+# 資料擷取與湖倉儲存
+datasets>=2.20.0
+pyarrow>=16.0.0
+duckdb>=1.1.0
+pandas>=2.2.0
+numpy>=1.26.0
+yfinance>=0.2.50
+defeatbeta-api>=0.0.61
+pandas-market-calendars>=4.4.0
+# 文本預處理與 API
+spacy>=3.7.0             # 執行 python -m spacy download en_core_web_sm
+openai>=1.50.0           # 同時支援 DeepSeek API 與 OpenAI API
+voyageai>=0.3.0
+python-dotenv>=1.0.1
+rank-bm25>=0.2.2
+# 量化建模、可解釋性與儀表板
+lightgbm>=4.5.0
+catboost>=1.2.7
+scikit-learn>=1.5.0
+shap>=0.46.0
+streamlit>=1.39.0
+plotly>=5.24.0
+\end{lstlisting}
+
+% ======================================================================
+% 第五章：分階段執行排程與四人團隊分工
+% ======================================================================
+\clearpage
+\section{四週衝刺排程、里程碑與四人團隊分工}
+
+為確保專題於學期末前穩健交付可重現之實證報告與互動系統，全案切分為 4 週里程碑並明確指派 4 位組員之並行責任邊界（見表~\ref{tab:schedule} 與表~\ref{tab:team}）。
+
+\begin{table}[H]
+\centering
+\caption{四週垂直切面（Vertical Slice）開發排程與交付里程碑}
+\label{tab:schedule}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\bfseries}P{1.4cm} P{2.9cm} Y P{4.0cm}}
+\toprule
+週次 & 階段主軸 & 核心工作項目 & 硬性驗收產出 \\
+\midrule
+Week 1 &
+Stage 0--2\newline 探勘、ETL 與 Pilot MVP &
+完成 HF 探勘與 \texttt{universe.json}；建立 200 場 Pilot \texttt{01\_raw} 與 \texttt{02\_clean}；完成 \texttt{yfinance} 量價／SUE 與嚴格 $\text{Close}(t=0)$ 對齊；完成 Prompt 一致性檢定（$r > 0.90$）。 &
+通過 10 筆人工時間對齊抽查；產出 200 場 Pilot 特徵與重測信度報告。 \\
+\midrule
+Week 2 &
+Stage 1--4\newline 全量抽取與特徵倉儲 &
+擴大至 100--150 檔（4,000+ 場）執行非同步 LLM 抽取與區段級 Voyage Embedding；以 DuckDB 合併產出 \texttt{model\_base.parquet}；完成 BM25 模糊詞比例腳本。 &
+完成 \texttt{01\_raw} 至 \texttt{04\_features} 全量 Parquet 檔（缺漏率 $< 5\%$）。 \\
+\midrule
+Week 3 &
+Stage 5\newline 量化建模、消融與回測 &
+建置含 20 日 Purge Gap 之 Walk-Forward 框架；訓練報酬與波動率雙目標 LightGBM/CatBoost；執行 M1--M4 消融實驗、交易成本敏感度與 SHAP 歸因分析。 &
+產出多空五分位累積報酬圖、RankIC/Sharpe 消融對照表與 SHAP 交互圖。 \\
+\midrule
+Week 4 &
+Stage 6\newline Post-Cutoff 與儀表板 &
+以 \texttt{defeatbeta-api} 補齊 2025--2026 Post-Cutoff 測試集驗證無前視偏差；完成 Streamlit 互動式語義體檢、SHAP 歸因與回測儀表板；統整期末實證報告。 &
+可現場 Demo 之 Streamlit App、Post-Cutoff 實證與完整期末簡報。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{四人團隊並行開發職責分工建議}
+\label{tab:team}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\bfseries}P{2.4cm} P{3.3cm} Y}
+\toprule
+角色與組員 & 負責模組 & 核心交付物與交接介面 \\
+\midrule
+資料工程主責\newline（組員 A） &
+Stage 0 / 1 / 2\newline Lakehouse 與時間對齊 &
+維護 \texttt{universe.json}、\texttt{01\_etl\_transcripts.py}、\texttt{03\_clean\_and\_align.py}，交付零時間錯位之 \texttt{02\_clean} 分區 Parquet 與資料品質稽核報告。 \\
+\midrule
+LLM 與語義特徵主責\newline（組員 B） &
+Stage 3 / 4\newline API 管線與語義偏移 &
+維護 \texttt{redact\_dict.json}、Prompt 校準、\texttt{04\_llm\_extract.py}（JSONL 快取）、\texttt{05\_embed\_sections.py} 與 BM25 模糊詞特徵，交付 \texttt{llm\_features.parquet}。 \\
+\midrule
+量化建模主責\newline（組員 C） &
+Stage 1 / 4 / 5\newline 市場特徵、回測與 SHAP &
+維護 \texttt{02\_etl\_market\_sue.py}、\texttt{06\_build\_features.py} 與 \texttt{07\_train\_backtest.py}，交付無洩漏 Walk-Forward 模型、四組消融實證、Post-Cutoff 績效與 SHAP 圖表。 \\
+\midrule
+系統整合與前端\newline（組員 D） &
+Stage 6\newline Streamlit 儀表板與文件 &
+開發 \texttt{app/streamlit\_app.py}（語義雷達圖、證據引文標記、即時量價／SHAP 預測與消融回測報告），並統籌期末報告與簡報視覺化。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ======================================================================
+% 第六章：風險管控矩陣與參考文獻
+% ======================================================================
+\clearpage
+\section{執行風險預警與備援對策}
+
+為防止開發過程中遇到外部依賴變動或模型訊號不如預期，預先擬定對應之風險備援方案（表~\ref{tab:risks}）。
+
+\begin{table}[H]
+\centering
+\caption{專案執行風險管控與降級備援矩陣}
+\label{tab:risks}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\bfseries}P{2.8cm} P{4.3cm} Y}
+\toprule
+潛在風險情境 & 早期偵測指標 & 具體備援與降級策略 \\
+\midrule
+1. \texttt{kurry} 早期年份缺時分秒 &
+Stage 0 探勘發現 2016--2018 多筆時間為 \texttt{00:00:00} &
+缺時分秒者一律保守映射至下一個交易日（不冒險猜測盤前），或透過 \texttt{yfinance} \texttt{earnings\_dates} 補齊 BMO/AMC 標記。 \\
+\midrule
+2. \texttt{yfinance} 部分場次缺歷史 EPS 共識值 &
+Stage 1 合併 \texttt{eps\_sue} 缺漏率 $> 20\%$ &
+優先以 \texttt{defeatbeta-api} 財報資料補值；若仍缺漏則改用「會前 1 日收盤至會後當日開盤之隔夜跳空報酬（Earnings Announcement Return, EAR）」作為市場即時硬驚喜代理變數（學術界標準作法）。 \\
+\midrule
+3. DeepSeek API 高峰期逾時或限流 &
+\texttt{04\_llm\_extract.py} 重試率 $> 10\%$ &
+調降 \texttt{asyncio.Semaphore} 至 5--8；或無縫切換至 OpenAI \texttt{gpt-4o-mini} Batch API（僅需改動 3 行設定，且享 50\% 離峰折扣）。 \\
+\midrule
+4. 超額報酬模型樣本外 Sharpe 偏低 &
+Week 3 消融實驗發現 M4 報酬訊號弱於預期 &
+本專案採\textbf{雙目標解耦設計}：管理層模糊度與迴避度對\textbf{事後實現波動率（\texttt{target\_rv}）}的預測力在文獻上遠比方向報酬更穩健，可將波動率風控與「避開高風險地雷股（僅做空 Q1／濾網策略）」作為核心亮點呈現。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{核心參考文獻}
+\begin{enumerate}[leftmargin=1.8em, itemsep=2pt, font=\small]
+    \item Ao, M., Zhao, F., Feldman, R., Attar, I., Hatskin, L., \& Rozenfeld, B. (2025). \textit{Familiar Signal, New Context: The Evolution of Earnings Call Sentiment Analysis from Lexicons to LLMs}. S\&P Global Market Intelligence Quantitative Research.
+    \item Lopez-Lira, A., \& Tang, Y. (2026). Can ChatGPT forecast stock price movements? Return predictability and large language models. \textit{Journal of Financial Economics}, 184, 104335.
+    \item López de Prado, M. (2018). \textit{Advances in Financial Machine Learning}. John Wiley \& Sons.
+    \item Meursault, V., Liang, P. J., Routledge, B. R., \& Scanlon, M. M. (2023). PEAD.txt: Post-earnings-announcement drift using text. \textit{Journal of Financial and Quantitative Analysis}, 58(6), 2299--2326.
+    \item Tang, Y., \& Yang, Y. (2025). FinMTEB: Finance Massive Text Embedding Benchmark. \textit{Proceedings of EMNLP 2025}, 3620--3638.
+\end{enumerate}
+
+\end{document}

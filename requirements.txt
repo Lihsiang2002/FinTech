@@ -1,0 +1,24 @@
+# 資料擷取與湖倉儲存
+datasets>=2.20.0
+pyarrow>=16.0.0
+duckdb>=1.1.0
+pandas>=2.2.0
+numpy>=1.26.0
+yfinance>=0.2.50
+pandas-market-calendars>=4.4.0
+
+# 文本預處理與 API
+openai>=1.50.0
+voyageai>=0.3.0
+python-dotenv>=1.0.1
+rank-bm25>=0.2.2
+
+# 量化建模、可解釋性與儀表板
+lightgbm>=4.5.0
+scikit-learn>=1.5.0
+shap>=0.46.0
+streamlit>=1.39.0
+plotly>=5.24.0
+
+# 測試
+pytest>=8.0.0
