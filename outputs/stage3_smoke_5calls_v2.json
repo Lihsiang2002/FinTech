@@ -1,0 +1,201 @@
+{
+  "generated_at_utc": "2026-11-26T08:44:16.061561+00:00",
+  "model": "gpt-4o-mini",
+  "prompt_version": "v2",
+  "env_source": "config.env",
+  "n_calls": 5,
+  "total_prompt_tokens": 68260,
+  "total_completion_tokens": 659,
+  "avg_prompt_tokens": 13652.0,
+  "avg_completion_tokens": 131.8,
+  "actual_sync_cost_usd": 0.010634,
+  "projected_pilot_200_batch_cost_usd": 0.2127,
+  "projected_full_batch_cost_usd": 4.6919,
+  "total_valid_calls_in_clean": 4412,
+  "dispersion": {
+    "prepared_optimism": {
+      "min": 54.0,
+      "max": 75.0,
+      "range": 21.0,
+      "std": 8.98,
+      "n_unique": 4
+    },
+    "qa_optimism": {
+      "min": 48.0,
+      "max": 68.0,
+      "range": 20.0,
+      "std": 7.82,
+      "n_unique": 4
+    },
+    "qa_tone_drop": {
+      "min": -13.0,
+      "max": -6.0,
+      "range": 7.0,
+      "std": 2.92,
+      "n_unique": 5
+    },
+    "ambiguity_score": {
+      "min": 42.0,
+      "max": 55.0,
+      "range": 13.0,
+      "std": 4.98,
+      "n_unique": 3
+    },
+    "qa_evasiveness": {
+      "min": 36.0,
+      "max": 42.0,
+      "range": 6.0,
+      "std": 2.45,
+      "n_unique": 3
+    },
+    "guidance_revision": {
+      "min": 0.0,
+      "max": 1.0,
+      "range": 1.0,
+      "std": 0.55,
+      "n_unique": 2
+    }
+  },
+  "results": [
+    {
+      "event_id": "MCD_2024_Q4",
+      "symbol": "MCD",
+      "company_name": "McDonald's Corporation",
+      "gics_sector": "Consumer Discretionary",
+      "year": 2024,
+      "quarter": 4,
+      "event_trading_date": "2025-02-10",
+      "total_word_count": 9985,
+      "payload": {
+        "prepared_optimism": 54,
+        "qa_optimism": 48,
+        "ambiguity_score": 55,
+        "qa_evasiveness": 42,
+        "guidance_revision": 0,
+        "optimistic_quote": "I'm pleased with the [YEAR] market plans, particularly their balance of value and full-margin food innovation.",
+        "evasive_quote": "I won't get into kind of specific comp numbers, but I think, you know, I think it's certainly reasonable to think of [CURRENT_QUARTER] as kind of a low point quarter for the year.",
+        "brief_rationale": "Management's prepared remarks conveyed a balanced outlook with some optimism about recovery, but the Q&A revealed more caution and uncertainty, particularly regarding near-term performance.",
+        "optimism_score": 51.0,
+        "qa_tone_drop": -6
+      },
+      "prompt_tokens": 13547,
+      "completion_tokens": 140,
+      "total_tokens": 13687,
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_d6e848e6b3",
+      "elapsed_sec": 6.85
+    },
+    {
+      "event_id": "LLY_2024_Q4",
+      "symbol": "LLY",
+      "company_name": "Eli Lilly and Company",
+      "gics_sector": "Health Care",
+      "year": 2024,
+      "quarter": 4,
+      "event_trading_date": "2025-02-07",
+      "total_word_count": 8966,
+      "payload": {
+        "prepared_optimism": 75,
+        "qa_optimism": 62,
+        "ambiguity_score": 45,
+        "qa_evasiveness": 36,
+        "guidance_revision": 1,
+        "optimistic_quote": "We finished $4 billion above our first-time revenue guide and $4 per share above our first-time EPS guide when taking IPR&D charges into account.",
+        "evasive_quote": "We don't think there's a place for this because we have full supply, and there's no reason to have non-approved kind of illegitimate product out there.",
+        "brief_rationale": "Management displayed strong confidence in prepared remarks, but faced more cautious questioning in Q&A, leading to a moderate decline in optimism.",
+        "optimism_score": 68.5,
+        "qa_tone_drop": -13
+      },
+      "prompt_tokens": 13120,
+      "completion_tokens": 133,
+      "total_tokens": 13253,
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_d6e848e6b3",
+      "elapsed_sec": 3.12
+    },
+    {
+      "event_id": "HON_2024_Q4",
+      "symbol": "HON",
+      "company_name": "Honeywell International Inc.",
+      "gics_sector": "Industrials",
+      "year": 2024,
+      "quarter": 4,
+      "event_trading_date": "2025-02-06",
+      "total_word_count": 10505,
+      "payload": {
+        "prepared_optimism": 65,
+        "qa_optimism": 54,
+        "ambiguity_score": 45,
+        "qa_evasiveness": 38,
+        "guidance_revision": 0,
+        "optimistic_quote": "We finished [YEAR] on a positive note, exceeding or meeting the high end of our guidance for organic sales growth and adjusted earnings growth in the [CURRENT_QUARTER].",
+        "evasive_quote": "We have to do more work. And that's why we have offered a second half [YEAR] because we won't have ample time to understand it and execute it.",
+        "brief_rationale": "Management expressed confidence in long-term growth and strategic initiatives, but showed caution regarding near-term challenges and macroeconomic conditions during Q&A.",
+        "optimism_score": 59.5,
+        "qa_tone_drop": -11
+      },
+      "prompt_tokens": 14480,
+      "completion_tokens": 141,
+      "total_tokens": 14621,
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_d6e848e6b3",
+      "elapsed_sec": 3.71
+    },
+    {
+      "event_id": "XOM_2024_Q4",
+      "symbol": "XOM",
+      "company_name": "Exxon Mobil Corporation",
+      "gics_sector": "Energy",
+      "year": 2024,
+      "quarter": 4,
+      "event_trading_date": "2025-02-03",
+      "total_word_count": 9255,
+      "payload": {
+        "prepared_optimism": 75,
+        "qa_optimism": 68,
+        "ambiguity_score": 42,
+        "qa_evasiveness": 36,
+        "guidance_revision": 1,
+        "optimistic_quote": "We're confident we'll deliver $20 billion more in earnings and $30 billion more in cash flow, all of which enables us to keep our commitment to sustainable, competitive, and growing shareholder returns.",
+        "evasive_quote": "I would tell you that that's a challenging, to project that far in the future. There's a lot of variables that go into the developments across all of our upstream portfolios.",
+        "brief_rationale": "Management's prepared remarks conveyed strong confidence in growth and operational performance, while Q&A responses showed some caution and hedging regarding future projections.",
+        "optimism_score": 71.5,
+        "qa_tone_drop": -7
+      },
+      "prompt_tokens": 12537,
+      "completion_tokens": 146,
+      "total_tokens": 12683,
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_d6e848e6b3",
+      "elapsed_sec": 2.89
+    },
+    {
+      "event_id": "SHW_2024_Q4",
+      "symbol": "SHW",
+      "company_name": "The Sherwin-Williams Company",
+      "gics_sector": "Materials",
+      "year": 2024,
+      "quarter": 4,
+      "event_trading_date": "2025-01-31",
+      "total_word_count": 10867,
+      "payload": {
+        "prepared_optimism": 62,
+        "qa_optimism": 54,
+        "ambiguity_score": 45,
+        "qa_evasiveness": 38,
+        "guidance_revision": 0,
+        "optimistic_quote": "We are extremely well positioned to continue delivering shareholder value.",
+        "evasive_quote": "I don't know that we shared a number and I'm certainly not prepared to share a number today.",
+        "brief_rationale": "Management displayed confidence in prepared remarks but became more cautious and less specific during Q&A, reflecting a tempered outlook.",
+        "optimism_score": 58.0,
+        "qa_tone_drop": -8
+      },
+      "prompt_tokens": 14576,
+      "completion_tokens": 99,
+      "total_tokens": 14675,
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_d6e848e6b3",
+      "elapsed_sec": 3.63
+    }
+  ]
+}

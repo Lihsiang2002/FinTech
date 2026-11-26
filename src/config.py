@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 
 # ==================== 專案根目錄與分層路徑 ====================
@@ -31,11 +31,26 @@ RAW_NYSE_CALENDAR_PATH: Path = RAW_DIR / "nyse_calendar.parquet"
 CLEAN_DIR: Path = DATA_DIR / "02_clean"
 CLEAN_TRANSCRIPTS_DIR: Path = CLEAN_DIR / "transcripts_clean"
 CACHE_DIR: Path = DATA_DIR / "03_cache"
+API_EXTRACT_CACHE_PATH: Path = CACHE_DIR / "api_extract_cache.jsonl"
+RETEST_CACHE_PATH: Path = CACHE_DIR / "api_retest_cache.jsonl"
+PIPELINE_STATE_DB_PATH: Path = CACHE_DIR / "pipeline_state.sqlite"
+BATCH_WORKDIR: Path = CACHE_DIR / "openai_batches"
+
 FEATURES_DIR: Path = DATA_DIR / "04_features"
+LLM_FEATURES_PATH: Path = FEATURES_DIR / "llm_features.parquet"
 
 OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
 STAGE1_AUDIT_MD: Path = OUTPUTS_DIR / "stage1_raw_audit.md"
 STAGE2_AUDIT_MD: Path = OUTPUTS_DIR / "stage2_clean_audit.md"
+STAGE3_SMOKE_JSON: Path = OUTPUTS_DIR / "stage3_smoke_5calls_v2.json"
+STAGE3_SMOKE_MD: Path = OUTPUTS_DIR / "stage3_smoke_5calls_v2.md"
+STAGE3_PILOT_AUDIT_MD: Path = OUTPUTS_DIR / "stage3_pilot_audit.md"
+STAGE3_AUDIT_MD: Path = OUTPUTS_DIR / "stage3_llm_audit.md"
+
+ENV_FILE_CANDIDATES: Tuple[Path, ...] = (
+    PROJECT_ROOT / "config.env",
+    PROJECT_ROOT / ".env",
+)
 
 
 # ==================== 資料源與樣本範圍設定 ====================
@@ -147,6 +162,34 @@ class CleanSettings:
     audit_sample_size: int = 10
 
 
+@dataclass(frozen=True)
+class LLMSettings:
+    """Stage 3A OpenAI 結構化語義抽取與 Batch API 設定。"""
+
+    provider: str = "openai"
+    model: str = "gpt-4o-mini"
+    prompt_version: str = "v2"
+    prompt_path: Path = PROMPTS_DIR / "extract_v2.yaml"
+    temperature: float = 0.0
+    seed: int = 42
+    max_completion_tokens: int = 500
+    request_timeout_sec: float = 90.0
+    max_retries: int = 3
+    retry_backoff_base_sec: float = 2.0
+    batch_endpoint: str = "/v1/chat/completions"
+    batch_completion_window: str = "24h"
+    batch_shard_size: int = 100
+    max_batch_file_mb: float = 150.0
+    smoke_test_count: int = 5
+    pilot_quarters_per_symbol: int = 10
+    retest_sample_size: int = 30
+    # OpenAI gpt-4o-mini 官方參考定價（USD / 1M tokens）
+    sync_input_cost_per_1m: float = 0.15
+    sync_output_cost_per_1m: float = 0.60
+    batch_input_cost_per_1m: float = 0.075
+    batch_output_cost_per_1m: float = 0.30
+
+
 # ==================== 量化建模與回測參數 ====================
 @dataclass(frozen=True)
 class QuantSettings:
@@ -166,6 +209,7 @@ class QuantSettings:
 DATA_CFG = DataSettings()
 MARKET_ETL_CFG = MarketETLSettings()
 CLEAN_CFG = CleanSettings()
+LLM_CFG = LLMSettings()
 PROBE_CFG = ProbeSettings()
 QUANT_CFG = QuantSettings()
 
@@ -178,10 +222,25 @@ def ensure_project_dirs() -> None:
         RAW_DIR,
         CLEAN_DIR,
         CACHE_DIR,
+        BATCH_WORKDIR,
         FEATURES_DIR,
         OUTPUTS_DIR,
     ):
         directory.mkdir(parents=True, exist_ok=True)
+
+
+def load_project_env(
+    candidates: Tuple[Path, ...] = ENV_FILE_CANDIDATES,
+    override: bool = False,
+) -> Optional[Path]:
+    """依序載入專案環境變數檔（預設優先 config.env，其次 .env），回傳實際載入之路徑。"""
+    from dotenv import load_dotenv
+
+    for env_path in candidates:
+        if env_path.exists():
+            load_dotenv(dotenv_path=env_path, override=override)
+            return env_path
+    return None
 
 
 def load_universe(path: Path = UNIVERSE_PATH) -> Dict[str, object]:
