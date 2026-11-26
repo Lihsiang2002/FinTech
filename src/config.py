@@ -35,9 +35,13 @@ API_EXTRACT_CACHE_PATH: Path = CACHE_DIR / "api_extract_cache.jsonl"
 RETEST_CACHE_PATH: Path = CACHE_DIR / "api_retest_cache.jsonl"
 PIPELINE_STATE_DB_PATH: Path = CACHE_DIR / "pipeline_state.sqlite"
 BATCH_WORKDIR: Path = CACHE_DIR / "openai_batches"
+EMBED_CACHE_DIR: Path = CACHE_DIR / "embed_sections"
+EMBED_BATCH_WORKDIR: Path = CACHE_DIR / "openai_embed_batches"
 
 FEATURES_DIR: Path = DATA_DIR / "04_features"
 LLM_FEATURES_PATH: Path = FEATURES_DIR / "llm_features.parquet"
+EMBED_DRIFT_FEATURES_PATH: Path = FEATURES_DIR / "embed_drift_features.parquet"
+SECTION_EMBEDDINGS_PATH: Path = FEATURES_DIR / "section_embeddings.parquet"
 
 OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
 STAGE1_AUDIT_MD: Path = OUTPUTS_DIR / "stage1_raw_audit.md"
@@ -46,6 +50,8 @@ STAGE3_SMOKE_JSON: Path = OUTPUTS_DIR / "stage3_smoke_5calls_v2.json"
 STAGE3_SMOKE_MD: Path = OUTPUTS_DIR / "stage3_smoke_5calls_v2.md"
 STAGE3_PILOT_AUDIT_MD: Path = OUTPUTS_DIR / "stage3_pilot_audit.md"
 STAGE3_AUDIT_MD: Path = OUTPUTS_DIR / "stage3_llm_audit.md"
+STAGE3B_SMOKE_MD: Path = OUTPUTS_DIR / "stage3b_embed_5co_report.md"
+STAGE3B_AUDIT_MD: Path = OUTPUTS_DIR / "stage3b_embed_audit.md"
 
 ENV_FILE_CANDIDATES: Tuple[Path, ...] = (
     PROJECT_ROOT / "config.env",
@@ -190,6 +196,25 @@ class LLMSettings:
     batch_output_cost_per_1m: float = 0.30
 
 
+@dataclass(frozen=True)
+class EmbedSettings:
+    """Stage 3B 區段級金融語義 Embedding 與跨季偏移設定。"""
+
+    provider: str = "openai"
+    model: str = "text-embedding-3-small"
+    dimensions: int = 1536
+    batch_endpoint: str = "/v1/embeddings"
+    batch_completion_window: str = "24h"
+    max_chunk_words: int = 3500
+    max_chunk_chars: int = 20000
+    batch_shard_calls: int = 200
+    max_batch_file_mb: float = 150.0
+    smoke_symbols: Tuple[str, ...] = ("AAPL", "JPM", "LLY", "XOM", "MCD")
+    # OpenAI text-embedding-3-small 官方參考定價（USD / 1M tokens）
+    sync_cost_per_1m: float = 0.02
+    batch_cost_per_1m: float = 0.01
+
+
 # ==================== 量化建模與回測參數 ====================
 @dataclass(frozen=True)
 class QuantSettings:
@@ -210,6 +235,7 @@ DATA_CFG = DataSettings()
 MARKET_ETL_CFG = MarketETLSettings()
 CLEAN_CFG = CleanSettings()
 LLM_CFG = LLMSettings()
+EMBED_CFG = EmbedSettings()
 PROBE_CFG = ProbeSettings()
 QUANT_CFG = QuantSettings()
 
@@ -223,6 +249,8 @@ def ensure_project_dirs() -> None:
         CLEAN_DIR,
         CACHE_DIR,
         BATCH_WORKDIR,
+        EMBED_CACHE_DIR,
+        EMBED_BATCH_WORKDIR,
         FEATURES_DIR,
         OUTPUTS_DIR,
     ):
