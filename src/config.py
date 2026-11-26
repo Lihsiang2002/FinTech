@@ -42,6 +42,7 @@ FEATURES_DIR: Path = DATA_DIR / "04_features"
 LLM_FEATURES_PATH: Path = FEATURES_DIR / "llm_features.parquet"
 EMBED_DRIFT_FEATURES_PATH: Path = FEATURES_DIR / "embed_drift_features.parquet"
 SECTION_EMBEDDINGS_PATH: Path = FEATURES_DIR / "section_embeddings.parquet"
+MODEL_DATASET_PATH: Path = FEATURES_DIR / "model_dataset.parquet"
 
 OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
 STAGE1_AUDIT_MD: Path = OUTPUTS_DIR / "stage1_raw_audit.md"
@@ -52,6 +53,7 @@ STAGE3_PILOT_AUDIT_MD: Path = OUTPUTS_DIR / "stage3_pilot_audit.md"
 STAGE3_AUDIT_MD: Path = OUTPUTS_DIR / "stage3_llm_audit.md"
 STAGE3B_SMOKE_MD: Path = OUTPUTS_DIR / "stage3b_embed_5co_report.md"
 STAGE3B_AUDIT_MD: Path = OUTPUTS_DIR / "stage3b_embed_audit.md"
+STAGE4_AUDIT_MD: Path = OUTPUTS_DIR / "stage4_feature_audit.md"
 
 ENV_FILE_CANDIDATES: Tuple[Path, ...] = (
     PROJECT_ROOT / "config.env",
@@ -224,11 +226,131 @@ class QuantSettings:
     pre_car_windows: Tuple[int, ...] = (20, 60, 120)
     pead_horizons: Tuple[int, ...] = (10, 20)
     purge_gap_trading_days: int = 20
+    eps_match_max_days: int = 5
+    trading_days_per_year: int = 252
     one_way_cost_bps: float = 10.0
     train_start_year: int = 2016
     initial_train_end_year: int = 2018
     walk_forward_end_year: int = 2024
     post_cutoff_start_year: int = 2025
+
+
+# ==================== 特徵分組單一事實來源（供 Stage 4 與 Stage 5 消融實驗共用） ====================
+KEY_META_COLUMNS: Tuple[str, ...] = (
+    "event_id",
+    "symbol",
+    "gics_sector",
+    "year",
+    "quarter",
+    "session_type",
+    "alignment_flag",
+    "event_trading_date",
+    "pre_end_date",
+    "post_10d_date",
+    "post_20d_date",
+)
+
+FEATURE_GROUPS: Dict[str, Tuple[str, ...]] = {
+    # 嚴格截斷至 Close(t-1) 之事前量價與市場狀態特徵（適用於 Open 與 Close 兩種進場點）
+    "market_pre": (
+        "pre_ret_5d",
+        "pre_ret_20d",
+        "pre_ret_60d",
+        "pre_ret_120d",
+        "pre_car_20d",
+        "pre_car_60d",
+        "pre_car_120d",
+        "pre_rv_20d",
+        "pre_rv_60d",
+        "pre_rv_ratio_20_60",
+        "pre_amihud_20d",
+        "pre_vol_ratio_5_20",
+        "pre_drawdown_60d",
+        "pre_beta_60d",
+        "pre_spx_ret_20d",
+        "pre_spx_ret_60d",
+        "pre_spx_rv_20d",
+        "pre_vix_close",
+        "pre_vix_chg_5d",
+        "pre_vix_chg_20d",
+        "pre_vix_pct_rank_252d",
+    ),
+    # 事件日硬財報、文本結構與事件日可觀測價量反應（Close(t=0) 進場基準）
+    "hard_event": (
+        "sue_pct",
+        "sue_diff",
+        "sue_beat_flag",
+        "sue_available",
+        "is_bmo",
+        "prepared_word_count",
+        "qa_word_count",
+        "total_word_count",
+        "qa_word_ratio",
+        "log_total_words",
+        "qoq_word_count_pct_chg",
+    ),
+    # 僅在 Close(t=0) 進場點可觀測之事件日反應特徵（Open(t=0) 敏感度測試時自動排除）
+    "event_day_close_only": (
+        "event_day_ret",
+        "event_day_excess_ret",
+        "overnight_gap",
+        "intraday_reversal",
+        "event_day_vol_ratio",
+    ),
+    # Stage 3A LLM 結構化情緒與跨季差分特徵
+    "llm_sentiment": (
+        "prepared_optimism",
+        "qa_optimism",
+        "optimism_score",
+        "qa_tone_drop",
+        "ambiguity_score",
+        "qa_evasiveness",
+        "guidance_revision",
+        "qoq_prep_opt_diff",
+        "qoq_qa_opt_diff",
+        "qoq_opt_diff",
+        "qoq_tone_drop_diff",
+        "qoq_amb_diff",
+        "qoq_evas_diff",
+        "qoq_guid_diff",
+        "opt_vs_trailing_4q_mean",
+    ),
+    # Stage 3B 區段級 Embedding 跨季語義偏移與背離特徵
+    "embed_drift": (
+        "prep_qa_divergence",
+        "qoq_prep_drift",
+        "qoq_qa_drift",
+        "qoq_full_drift",
+        "yoy_prep_drift",
+        "yoy_qa_drift",
+        "prep_drift_vs_4q_centroid",
+        "qa_drift_vs_4q_centroid",
+    ),
+    # 多模態領域交互項（情緒／語義 × 市場波動／硬財報）
+    "interactions": (
+        "opt_x_vix",
+        "amb_x_rv20",
+        "drift_x_rv20",
+        "opt_x_sue_sign",
+        "tone_drop_x_evas",
+    ),
+}
+
+LABEL_COLUMNS: Tuple[str, ...] = (
+    "label_ret_10d",
+    "label_spx_ret_10d",
+    "label_excess_ret_10d",
+    "label_ret_20d",
+    "label_spx_ret_20d",
+    "label_excess_ret_20d",
+    "label_open_excess_ret_10d",
+    "label_open_excess_ret_20d",
+    "label_rv_10d",
+    "label_rv_20d",
+    "label_log_rv_10d",
+    "label_log_rv_20d",
+    "label_rv_ratio_20d",
+)
 
 
 DATA_CFG = DataSettings()
